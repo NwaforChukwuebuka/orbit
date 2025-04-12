@@ -10,6 +10,7 @@ import { SpotModule } from './spot/spot.module';
 import { WorkStationModule } from './work_station/work_station.module';
 import { VenueRulesModule } from './venue_rules/venue_rules.module';
 import { UserStreakModule } from './user_streak/user_streak.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserStreakModule } from './user_streak/user_streak.module';
     WorkStationModule,
     VenueRulesModule,
     UserStreakModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
