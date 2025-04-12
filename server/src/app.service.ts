@@ -9,7 +9,6 @@ export interface RootData {
 @Injectable()
 export class AppService {
   root(): RootData {
-    console.log(name);
     const data: RootData = {
       message: 'Welcome to Orbit Workspace API',
       version: '1.0.0',
