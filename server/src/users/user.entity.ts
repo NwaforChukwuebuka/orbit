@@ -9,7 +9,7 @@ import { Venue } from 'src/venue/venue.entity';
 import { Booking } from 'src/booking/booking.entity';
 import { Tag } from 'src/tag/tag.entity';
 
-@Entity('user')
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
