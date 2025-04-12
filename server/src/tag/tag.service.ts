@@ -31,6 +31,15 @@ export class TagService {
     return tags.map((tag) => this.mapToDto(tag));
   }
 
+  async findTagByName(name: string): Promise<Tag> {
+    const tag = await this.tagRepository.findOne({ where: { name } });
+    if (!tag) {
+      throw new NotFoundException(`Tag with name "${name}" not found`);
+    }
+
+    return tag;
+  }
+
   private mapToDto(tag: Tag): TagDto {
     const tagDto = new TagDto();
     tagDto.id = tag.id;
