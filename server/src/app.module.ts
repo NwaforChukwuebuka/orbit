@@ -12,7 +12,8 @@ import { VenueRulesModule } from './venue_rules/venue_rules.module';
 import { UserStreakModule } from './user_streak/user_streak.module';
 import { AuthModule } from './auth/auth.module';
 import { TagModule } from './tag/tag.module';
-
+import { redisClientFactory } from './common/utils/redis.client.factory';
+import { RedisService } from './common/utils/redis.service';
 @Module({
   imports: [
     TypeOrmModule,
@@ -31,6 +32,6 @@ import { TagModule } from './tag/tag.module';
     TagModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, redisClientFactory, RedisService],
 })
 export class AppModule {}
