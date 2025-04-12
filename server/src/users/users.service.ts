@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -9,7 +10,7 @@ import { VenueService } from 'src/venue/venue.service';
 import { TagService } from 'src/tag/tag.service';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
-import { FindManyOptions, QueryFailedError } from 'typeorm';
+import { QueryFailedError } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -36,47 +37,62 @@ export class UsersService {
     return user;
   }
 
-  async createAdminUser(createAdminUserDto: CreateAdminUserDTO): Promise<User> {
-    let venue: any;
-    // check if user with the email exist
-    const userExists = await this.userRepo.userWithEmailExists(createAdminUserDto.email);
-    if (userExists) {
+  async createAdminUser(dto: CreateAdminUserDTO): Promise<User> {
+    await this.ensureUserUniqueness(dto.email, dto.telephone);
+  
+    const venue = await this.createVenueSafely(dto.venueName, dto.venueSubdomain);
+  
+    const tag = await this.tagService.findTagByName('Owner');
+    const hashedPassword = await this.hashPassword(dto.password);
+  
+    const userData = {
+      ...dto,
+      password: hashedPassword,
+      venue,
+      tag,
+    };
+  
+    const user = this.userRepo.create(userData);
+    // TODO: Send a welcome email and verification code via RabbitMQ/Redis
+    return await this.userRepo.save(user);
+  }
+  
+
+  private async ensureUserUniqueness(email: string, phone: string): Promise<void> {
+    const [emailExists, phoneExists] = await Promise.all([
+      this.userRepo.userWithEmailExists(email),
+      this.userRepo.userWithPhoneExists(phone),
+    ]);
+  
+    if (emailExists) {
       throw new HttpException('User with the email already exists', 409);
     }
-    const phoneExists = await this.userRepo.userWithPhoneExists(createAdminUserDto.telephone);
+  
     if (phoneExists) {
       throw new HttpException('User with the phone number already exists', 409);
     }
+  }
+
+  private async createVenueSafely(name: string, subdomain: string): Promise<Venue> {
     try {
-      venue = await this.venueService.createVenue({
-        name: createAdminUserDto.venueName,
-        subdomain: createAdminUserDto.venueSubdomain,
-      });
+      return await this.venueService.createVenue({ name, subdomain });
     } catch (error) {
-      console.log(error);
       if (
         error instanceof QueryFailedError &&
-        (error as any).code === '23505' // Unique violation in Postgres
+        (error as any).code === '23505'
       ) {
         throw new HttpException(
           'Venue with this name or subdomain already exists',
           409,
         );
       }
-      // rethrow other unexpected errors
       throw error;
     }
-    // get the admin tag
-    const tag = await this.tagService.findTagByName('Owner');
-    // hash password
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(createAdminUserDto.password, salt);
-    createAdminUserDto.password = hashedPassword;
-
-    const createAdminUserData = { ...createAdminUserDto, venue, tag };
-
-    const createdUser = this.userRepo.create(createAdminUserData);
-    // TODO: Send a email with rabbit or redis pub sub
-    return await this.userRepo.save(createdUser);
   }
+
+  private async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return await bcrypt.hash(password, salt);
+  }
+  
 }
