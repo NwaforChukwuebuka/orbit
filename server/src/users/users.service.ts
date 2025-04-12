@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -36,27 +37,19 @@ export class UsersService {
   }
 
   async createAdminUser(createAdminUserDto: CreateAdminUserDTO): Promise<User> {
+    let venue: any;
+    // check if user with the email exist
+    const userExists = await this.userRepo.userWithEmailExists(createAdminUserDto.email);
+    if (userExists) {
+      throw new HttpException('User with the email already exists', 409);
+    }
     try {
-      const venue = await this.venueService.createVenue({
+      venue = await this.venueService.createVenue({
         name: createAdminUserDto.venueName,
         subdomain: createAdminUserDto.venueSubdomain,
       });
-      // get the admin tag
-      const tag = await this.tagService.findTagByName('Admin');
-      // hash password
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(
-        createAdminUserDto.password,
-        salt,
-      );
-      createAdminUserDto.password = hashedPassword;
-
-      const createAdminUserData = { ...createAdminUserDto, venue, tag };
-
-      const createdUser = this.userRepo.create(createAdminUserData);
-      // TODO: Send a email with rabbit or redis pub sub
-      return await this.userRepo.save(createdUser);
     } catch (error) {
+      console.log(error);
       if (
         error instanceof QueryFailedError &&
         (error as any).code === '23505' // Unique violation in Postgres
@@ -66,9 +59,20 @@ export class UsersService {
           409,
         );
       }
-
       // rethrow other unexpected errors
       throw error;
     }
+    // get the admin tag
+    const tag = await this.tagService.findTagByName('Owner');
+    // hash password
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(createAdminUserDto.password, salt);
+    createAdminUserDto.password = hashedPassword;
+
+    const createAdminUserData = { ...createAdminUserDto, venue, tag };
+
+    const createdUser = this.userRepo.create(createAdminUserData);
+    // TODO: Send a email with rabbit or redis pub sub
+    return await this.userRepo.save(createdUser);
   }
 }

@@ -28,12 +28,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       // user cache session timed out, forced to sign in again for security and low latency
       throw new UnauthorizedException('Unauthorized');
     }
-    console.log(user);
     const parsedUser = JSON.parse(user);
     return {
       email: parsedUser.email,
       userId: parsedUser.userId,
-      userTag: parsedUser.userTag,
+      userTag: parsedUser.tag.name,
       venue: parsedUser.venue,
     };
   }

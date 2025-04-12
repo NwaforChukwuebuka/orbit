@@ -8,6 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { GetUser } from './get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { OwnerAuthGuard } from './permissions/jwt-owner-permission-authguard';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -42,6 +43,15 @@ export class AuthController {
     return {
       message: 'User details fetched successfully',
       data: data,
+      statusCode: 200,
+    };
+  }
+
+  @UseGuards(OwnerAuthGuard)
+  @Get('test')
+  test() {
+    return {
+      message: 'Test successful',
       statusCode: 200,
     };
   }
