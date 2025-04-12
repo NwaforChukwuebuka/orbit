@@ -23,6 +23,10 @@ export class UsersService {
     return await this.userRepo.find();
   }
 
+  async findUserByEmail(email: string) {
+    return await this.userRepo.findByEmail(email);
+  }
+
   async createAdminUser(createAdminUserDto: CreateAdminUserDTO): Promise<User> {
     try {
       const venue = await this.venueService.createVenue({
@@ -58,6 +62,5 @@ export class UsersService {
       // rethrow other unexpected errors
       throw error;
     }
-    // create a venue first
   }
 }
