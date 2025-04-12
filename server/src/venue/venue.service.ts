@@ -3,7 +3,6 @@ import { Repository } from 'typeorm';
 import { Venue } from './venue.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateVenue } from './types/create-venue';
-
 @Injectable()
 export class VenueService {
   constructor(
