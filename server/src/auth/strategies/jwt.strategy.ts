@@ -23,15 +23,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JWTPayload) {
-    const user = await this.redisService.get(payload.userId);
+    const user = await this.redisService.get(payload.email);
     if (!user) {
+      // user cache session timed out, forced to sign in again for security and low latency
       throw new UnauthorizedException('Unauthorized');
     }
+    console.log(user);
     const parsedUser = JSON.parse(user);
     return {
       email: parsedUser.email,
       userId: parsedUser.userId,
       userTag: parsedUser.userTag,
+      venue: parsedUser.venue,
     };
   }
 }

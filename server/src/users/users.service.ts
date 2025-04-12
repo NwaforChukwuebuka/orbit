@@ -27,6 +27,14 @@ export class UsersService {
     return await this.userRepo.findByEmail(email);
   }
 
+  async getUserDetails(email: string): Promise<User> {
+    const user = await this.userRepo.findByEmailWithRelations(email);
+    if (!user) {
+      throw new HttpException('User with the email does not exists', 404);
+    }
+    return user;
+  }
+
   async createAdminUser(createAdminUserDto: CreateAdminUserDTO): Promise<User> {
     try {
       const venue = await this.venueService.createVenue({

@@ -13,6 +13,13 @@ export class UserRepository extends Repository<User> {
     return this.findOne({ where: { email } });
   }
 
+  async findByEmailWithRelations(email: string): Promise<User | null> {
+    return this.findOne({
+      where: { email },
+      relations: ['venue', 'tag', 'bookings'],
+    });
+  }
+
   async findActiveUsers(): Promise<User[]> {
     return this.find({ where: { isActive: true } });
   }
