@@ -11,6 +11,7 @@ import { TagService } from 'src/tag/tag.service';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { QueryFailedError } from 'typeorm';
+import { Venue } from 'src/venue/venue.entity';
 
 @Injectable()
 export class UsersService {
