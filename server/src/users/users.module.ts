@@ -6,7 +6,11 @@ import { DataSource } from 'typeorm';
 import { RedisService } from 'src/common/utils/redis.service';
 import { redisClientFactory } from 'src/common/utils/redis.client.factory';
 
+import { TagModule } from 'src/tag/tag.module';
+import { VenueModule } from 'src/venue/venue.module';
+
 @Module({
+  imports: [TagModule, VenueModule],
   providers: [
     UsersService,
     {
@@ -18,6 +22,6 @@ import { redisClientFactory } from 'src/common/utils/redis.client.factory';
     redisClientFactory,
   ],
   controllers: [UsersController],
-  exports: [RedisService, redisClientFactory],
+  exports: [RedisService, redisClientFactory, UsersService],
 })
 export class UsersModule {}

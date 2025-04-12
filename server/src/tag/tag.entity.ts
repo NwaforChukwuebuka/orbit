@@ -6,7 +6,7 @@ export class Tag {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false, unique: true })
   name: string;
 
   @OneToMany(() => User, (user) => user.tag)

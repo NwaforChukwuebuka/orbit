@@ -13,37 +13,37 @@ export class Venue {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   subdomain: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   logo: string;
 
-  @Column()
+  @Column({ nullable: true })
   brandColor: string;
 
-  @Column()
+  @Column({ nullable: true })
   contactEmail: string;
 
-  @Column()
+  @Column({ nullable: true })
   website: string;
 
-  @Column()
+  @Column({ nullable: true })
   contactPhone: string;
 
-  @Column()
+  @Column({ nullable: true })
   streetAddress: string;
 
-  @Column()
+  @Column({ nullable: true })
   city: string;
 
-  @Column()
+  @Column({ nullable: true })
   zipCode: number;
 
-  @Column()
+  @Column({ nullable: true })
   businessNum: string;
 
   @CreateDateColumn()
