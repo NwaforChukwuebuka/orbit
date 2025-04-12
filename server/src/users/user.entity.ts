@@ -14,19 +14,19 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   firstName: string;
 
-  @Column()
+  @Column({ nullable: false })
   lastName: string;
 
-  @Column()
+  @Column({ nullable: false, unique: true })
   email: string;
 
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true, unique: true })
   telephone: string;
 
   @Column()
@@ -34,6 +34,9 @@ export class User {
 
   @Column()
   updatedAt: Date;
+
+  @Column({ default: false })
+  isActive: boolean;
 
   @ManyToOne(() => Venue, (venue) => venue.users)
   venue: Venue;
