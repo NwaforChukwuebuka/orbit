@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from './datasource/typeorm.module';
 import { UsersModule } from './users/users.module';
 import { VenueModule } from './venue/venue.module';
+import { TagModule } from './tag/tag.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { VenueModule } from './venue/venue.module';
     }),
     UsersModule,
     VenueModule,
+    TagModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

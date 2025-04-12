@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { User } from '../users/user.entity';
 
-@Entity('venue')
+@Entity('venues')
 export class Venue {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -36,13 +36,13 @@ export class Venue {
   @Column()
   zipCode: number;
 
-  @Column({ name: 'business_num' })
+  @Column()
   businessNum: string;
 
-  @Column({ name: 'created_at' })
+  @Column()
   createdAt: string;
 
-  @Column({ name: 'updated_at' })
+  @Column()
   updatedAt: string;
 
   @OneToMany(() => User, (user) => user.venue)
