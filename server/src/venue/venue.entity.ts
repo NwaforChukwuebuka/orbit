@@ -36,13 +36,13 @@ export class Venue {
   @Column()
   zipCode: number;
 
-  @Column({ name: 'business_num' })
+  @Column()
   businessNum: string;
 
-  @Column({ name: 'created_at' })
+  @Column()
   createdAt: string;
 
-  @Column({ name: 'updated_at' })
+  @Column()
   updatedAt: string;
 
   @OneToMany(() => User, (user) => user.venue)
