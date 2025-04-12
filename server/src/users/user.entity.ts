@@ -1,13 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Venue } from 'src/venue/venue.entity';
 import { Booking } from 'src/booking/booking.entity';
 import { Tag } from 'src/tag/tag.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -24,15 +28,16 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   password: string;
 
   @Column({ nullable: true, unique: true })
   telephone: string;
 
-  @Column()
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @Column({ default: false })

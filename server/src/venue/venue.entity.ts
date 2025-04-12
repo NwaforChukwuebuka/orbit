@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
 
 @Entity('venues')
@@ -39,11 +46,11 @@ export class Venue {
   @Column()
   businessNum: string;
 
-  @Column()
-  createdAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column()
-  updatedAt: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => User, (user) => user.venue)
   users: User[];
