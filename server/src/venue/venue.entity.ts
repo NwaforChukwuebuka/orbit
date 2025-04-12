@@ -1,7 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
 
-@Entity('venue')
+@Entity('venues')
 export class Venue {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -36,14 +43,14 @@ export class Venue {
   @Column()
   zipCode: number;
 
-  @Column({ name: 'business_num' })
+  @Column()
   businessNum: string;
 
-  @Column({ name: 'created_at' })
-  createdAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Column({ name: 'updated_at' })
-  updatedAt: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => User, (user) => user.venue)
   users: User[];

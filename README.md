@@ -41,3 +41,4 @@ npm run dev
 - Implement Spaces/Section List endpoint
 - Implement add now admin user registration
 - Venue settings application
+- tags Crud

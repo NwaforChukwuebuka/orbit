@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { WorkStation } from '../work-station/work-station.entity';
+import { WorkStation } from '../work_station/work_station.entity';
 
 @Entity('spot')
 export class Spot {
@@ -12,16 +12,13 @@ export class Spot {
   @Column({ name: 'booked_user', type: 'json' })
   bookedUser: any;
 
-  @Column({ name: 'work_station' })
-  workStationId: string;
+  @ManyToOne(() => WorkStation)
+  @JoinColumn({ name: 'work_station' })
+  workStation: WorkStation;
 
-  @Column({ name: 'created_at' })
+  @Column({ name: 'created_at', type: 'date' })
   createdAt: Date;
 
   @Column({ name: 'updated_at' })
   updatedAt: number;
-
-  @ManyToOne(() => WorkStation, workStation => workStation.spots)
-  @JoinColumn({ name: 'work_station' })
-  workStation: WorkStation;
 } 

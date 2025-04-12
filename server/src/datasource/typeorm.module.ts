@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { User } from 'src/users/user.entity';
 import { Venue } from 'src/venue/venue.entity';
+import { Booking } from 'src/booking/booking.entity';
+import { Tag } from 'src/tag/tag.entity';
 
 @Global()
 @Module({
@@ -28,7 +30,7 @@ import { Venue } from 'src/venue/venue.entity';
             username: configService.get('DB_USERNAME'),
             password: configService.get('DB_PASSWORD'),
             database: configService.get('DB_NAME'),
-            entities: [User, Venue],
+            entities: [User, Venue, Booking, Tag],
             synchronize: true,
           });
           await dataSource.initialize();
