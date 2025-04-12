@@ -8,8 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { GetUser } from './get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { OwnerAuthGuard } from './permissions/jwt-owner-permission-authguard';
-import { AdminAuthGuard } from './permissions/jwt-admin-permission-authguard';
+import { StaffAuthGuard } from './permissions/jwt-staff-permission-authguard';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -48,7 +47,7 @@ export class AuthController {
     };
   }
 
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(StaffAuthGuard)
   @Get('test')
   test() {
     return {
