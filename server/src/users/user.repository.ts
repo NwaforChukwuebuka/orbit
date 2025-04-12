@@ -28,4 +28,9 @@ export class UserRepository extends Repository<User> {
     const user = await this.findOne({ where: { email } });
     return !!user;
   }
+
+  async userWithPhoneExists(phone: string): Promise<boolean> {
+    const user = await this.findOne({ where: { telephone: phone } });
+    return !!user;
+  }
 }

@@ -9,7 +9,7 @@ import { VenueService } from 'src/venue/venue.service';
 import { TagService } from 'src/tag/tag.service';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
-import { QueryFailedError } from 'typeorm';
+import { FindManyOptions, QueryFailedError } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -42,6 +42,10 @@ export class UsersService {
     const userExists = await this.userRepo.userWithEmailExists(createAdminUserDto.email);
     if (userExists) {
       throw new HttpException('User with the email already exists', 409);
+    }
+    const phoneExists = await this.userRepo.userWithPhoneExists(createAdminUserDto.telephone);
+    if (phoneExists) {
+      throw new HttpException('User with the phone number already exists', 409);
     }
     try {
       venue = await this.venueService.createVenue({
