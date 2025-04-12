@@ -8,9 +8,14 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { errorResponse, ServiceResponse } from '../utils/resp.util';
+import { LoggerService } from '../utils/logger.service';
 
 @Catch()
 export class GlobalHttpExceptionFilter implements ExceptionFilter {
+  private logger: LoggerService;
+  constructor() {
+    this.logger = new LoggerService();
+  }
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -26,6 +31,7 @@ export class GlobalHttpExceptionFilter implements ExceptionFilter {
           ? res
           : (res as ServiceResponse<any>)?.message || 'Unexpected error';
     }
+    this.logger.error(message, exception);
 
     const errorRes = errorResponse(message, status);
     response.status(status).json(errorRes);

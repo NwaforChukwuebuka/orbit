@@ -3,7 +3,7 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UsersService {
-  // lets inject user repository to the service layer to interact with the databse
+  // lets inject user repository to the service layer to interact with the database
   constructor(private userRepo: UserRepository) {}
 
   async getAllUsers() {
