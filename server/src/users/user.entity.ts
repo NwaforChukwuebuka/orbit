@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   Entity,
@@ -31,7 +32,7 @@ export class User {
   @Exclude({ toPlainOnly: true })
   password: string;
 
-  @Column({ nullable: true, unique: true })
+  @Column({ nullable: false, unique: true })
   telephone: string;
 
   @CreateDateColumn()

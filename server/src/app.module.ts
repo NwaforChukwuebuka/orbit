@@ -11,6 +11,7 @@ import { WorkStationModule } from './work_station/work_station.module';
 import { VenueRulesModule } from './venue_rules/venue_rules.module';
 import { UserStreakModule } from './user_streak/user_streak.module';
 import { AuthModule } from './auth/auth.module';
+import { TagModule } from './tag/tag.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     VenueRulesModule,
     UserStreakModule,
     AuthModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
