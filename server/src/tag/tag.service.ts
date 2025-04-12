@@ -28,7 +28,7 @@ export class TagService {
 
   async findAll(): Promise<TagDto[]> {
     const tags = await this.tagRepository.find();
-    return tags.map(tag => this.mapToDto(tag));
+    return tags.map((tag) => this.mapToDto(tag));
   }
 
   private mapToDto(tag: Tag): TagDto {

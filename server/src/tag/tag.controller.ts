@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { TagDto } from './dto/tag.dto';
@@ -8,8 +15,14 @@ export class TagController {
   constructor(private readonly tagService: TagService) {}
 
   @Post()
-  async createTag(@Body() createTagDto: CreateTagDto): Promise<TagDto> {
-    return this.tagService.create(createTagDto);
+  async createTag(@Body() createTagDto: CreateTagDto): Promise<any> {
+    const tag = await this.tagService.create(createTagDto);
+    return {
+      success: true,
+      data: tag,
+      message: 'Tag created successfully',
+      statusCode: 201,
+    };
   }
 
   @Get(':id')
