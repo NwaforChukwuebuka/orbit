@@ -3,7 +3,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateAdminUserDTO } from 'src/users/dto/create-admin-user.dto';
+import {
+  CreateAdminUserDTO,
+  CreateOtherUserDTO,
+} from 'src/users/dto/create-admin-user.dto';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { LoginResponse } from './types/login-response';
@@ -23,6 +26,10 @@ export class AuthService {
     createAdminUserDto: CreateAdminUserDTO,
   ): Promise<User> {
     return await this.userService.createAdminUser(createAdminUserDto);
+  }
+
+  async registerOtherUser(dto: CreateOtherUserDTO): Promise<User> {
+    return await this.userService.createOtherUser(dto);
   }
 
   async login(loginUserDto: LoginUserDTO): Promise<LoginResponse> {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -5,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { HttpException, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { CreateAdminUserDTO } from './dto/create-admin-user.dto';
+import { CreateAdminUserDTO, CreateOtherUserDTO } from './dto/create-admin-user.dto';
 import { VenueService } from 'src/venue/venue.service';
 import { TagService } from 'src/tag/tag.service';
 import { User } from './user.entity';
@@ -68,9 +69,10 @@ export class UsersService {
     // Also send and invite email to the user invited
     return inviteId
 
-
-
   }
+
+
+
 
   async createAdminUser(dto: CreateAdminUserDTO): Promise<User> {
     await this.ensureUserUniqueness(dto.email, dto.telephone);
@@ -90,6 +92,33 @@ export class UsersService {
     const user = this.userRepo.create(userData);
     // TODO: Send a welcome email and verification code via RabbitMQ/Redis
     return await this.userRepo.save(user);
+  }
+
+
+  async createOtherUser(dto: CreateOtherUserDTO): Promise<User> {
+    await this.ensureUserUniqueness(dto.email, dto.telephone);
+    const cacheKey = `${dto.inviteCode}-${dto.email}`
+    const cacheValue = await this.redisService.get(cacheKey)
+    const parsedCacheValue = JSON.parse(cacheValue);
+
+    const tag = await this.tagService.findOne(parsedCacheValue.tagId);
+    const venue = await this.venueService.findOne(parsedCacheValue.adminVenueId);
+    const hashedPassword = await this.hashPassword(dto.password);
+    if (!tag || !venue) {
+      throw new HttpException('Invalid invite code', 400);
+    }
+    // remove invitecode from the dto
+    delete (dto as Partial<CreateOtherUserDTO>).inviteCode;
+    const userData = {
+      ...dto,
+      password: hashedPassword,
+      venue,
+      tag,
+    };
+    const user = this.userRepo.create(userData);
+    await this.redisService.del(cacheKey)
+    return await this.userRepo.save(user);
+
   }
   
 
