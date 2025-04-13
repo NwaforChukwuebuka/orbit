@@ -33,7 +33,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       email: parsedUser.email,
       userId: parsedUser.userId,
       userTag: parsedUser.tag.name,
-      venue: parsedUser.venue,
+      venueId: parsedUser.venue.id,
     };
   }
 }

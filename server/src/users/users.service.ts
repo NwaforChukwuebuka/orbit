@@ -12,6 +12,9 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { QueryFailedError } from 'typeorm';
 import { Venue } from 'src/venue/venue.entity';
+import { GenerateUserInviteCodeDTO } from './dto/generate-invite-code.dto';
+import {v4 as uuidv4} from 'uuid';
+import { RedisService } from 'src/common/utils/redis.service';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +23,7 @@ export class UsersService {
     private userRepo: UserRepository,
     private venueService: VenueService,
     private tagService: TagService,
+    private redisService: RedisService
   ) {}
 
   async getAllUsers() {
@@ -36,6 +40,36 @@ export class UsersService {
       throw new HttpException('User with the email does not exists', 404);
     }
     return user;
+  }
+
+
+  async generateInvite(dto: GenerateUserInviteCodeDTO, adminVenueId: string, adminTagName: string): Promise<string> {
+    // check if user is already invited
+    const user = await this.userRepo.findByEmailWithRelations(dto.email);
+    if (user?.venue.id === adminVenueId) {
+      throw new HttpException('User is already invited', 409);
+    }
+    // generate uuid
+    const inviteId = uuidv4()
+    // get tag, for tag id validation
+   const userTag =  await this.tagService.findOne(dto.tagId);
+   const adminTag = await this.tagService.findTagByName(adminTagName);
+   if (userTag?.name === "Owner" && adminTag?.name !== "Owner") {
+    throw new HttpException('Admin cannot invite an owner', 400);
+   }
+    const inviteData = {
+      tagId: dto.tagId,
+      adminVenueId
+    }
+    const cacheKey = `${inviteId}-${dto.email}`
+    const cacheValue = JSON.stringify(inviteData)
+    await this.redisService.set(cacheKey, cacheValue, 60 * 60 * 24) // expires in a day
+    // TODO: might want to add the invideId to the fronted query param url for registration
+    // Also send and invite email to the user invited
+    return inviteId
+
+
+
   }
 
   async createAdminUser(dto: CreateAdminUserDTO): Promise<User> {
