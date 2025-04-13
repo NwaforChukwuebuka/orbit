@@ -29,7 +29,7 @@ export class Spot {
     example: true,
     default: true,
   })
-  @Column({ name: 'is_available' })
+  @Column({ name: 'is_available', default: true })
   isAvailable: boolean;
 
   @ApiProperty({

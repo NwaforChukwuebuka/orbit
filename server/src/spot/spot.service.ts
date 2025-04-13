@@ -40,8 +40,6 @@ export class SpotService {
       const spot = this.spotRepository.create({
         ...spotData,
         section: { id: sectionId } as Section,
-        createdAt: new Date(),
-        updatedAt: this.getCurrentTimestamp(),
       });
       return await this.spotRepository.save(spot);
     } catch (error) {

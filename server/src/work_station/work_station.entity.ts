@@ -25,7 +25,7 @@ export class WorkStation {
   @Column()
   city: string;
 
-  @Column({ name: 'is_open' })
+  @Column({ name: 'is_open', default: true })
   isOpen: boolean;
 
   @Column({ name: 'zip_code' })
