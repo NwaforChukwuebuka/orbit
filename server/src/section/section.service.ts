@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Injectable,
   NotFoundException,
@@ -39,7 +37,7 @@ export class SectionService {
     return section;
   }
 
-  async create(createSectionDto: CreateSectionDto): Promise<Section> {
+  async create(createSectionDto: CreateSectionDto): Promise<any> {
     // First verify that the workStation exists
     const workStation = await this.workStationService.findOne(
       createSectionDto.workStationId,
@@ -58,7 +56,13 @@ export class SectionService {
       workStation,
     });
 
-    return this.sectionRepository.save(section);
+    const createdSection = await this.sectionRepository.save(section);
+    console.log('This is created section: ', createdSection);
+    const response = {
+      id: createdSection.id,
+      name: createdSection.name,
+    };
+    return response;
   }
 
   async update(

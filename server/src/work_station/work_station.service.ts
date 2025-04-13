@@ -43,10 +43,11 @@ export class WorkStationService {
     });
   }
 
+  // TODO Refactor without relations
   async findOne(id: string): Promise<WorkStation> {
     const workStation = await this.workStationRepository.findOne({
       where: { id },
-      relations: ['venue', 'sections'],
+      relations: ['venue', 'sections', 'sections.spots'],
     });
 
     if (!workStation) {
@@ -55,6 +56,8 @@ export class WorkStationService {
 
     return workStation;
   }
+
+  // TODO add another with relations
 
   async update(
     id: string,
