@@ -3,7 +3,10 @@
 
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAdminUserDTO } from 'src/users/dto/create-admin-user.dto';
+import {
+  CreateAdminUserDTO,
+  CreateOtherUserDTO,
+} from 'src/users/dto/create-admin-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { GetUser } from './get-user.decorator';
@@ -22,6 +25,16 @@ export class AuthController {
     return {
       message: 'Admin user registered successfully',
       data: adminUser,
+      statusCode: 201,
+    };
+  }
+
+  @Post('register')
+  async registerUser(@Body() dto: CreateOtherUserDTO) {
+    const OtherUser = await this.authService.registerOtherUser(dto);
+    return {
+      message: 'User registered successfully',
+      data: OtherUser,
       statusCode: 201,
     };
   }

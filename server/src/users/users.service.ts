@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -5,13 +6,16 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { HttpException, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { CreateAdminUserDTO } from './dto/create-admin-user.dto';
+import { CreateAdminUserDTO, CreateOtherUserDTO } from './dto/create-admin-user.dto';
 import { VenueService } from 'src/venue/venue.service';
 import { TagService } from 'src/tag/tag.service';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { QueryFailedError } from 'typeorm';
 import { Venue } from 'src/venue/venue.entity';
+import { GenerateUserInviteCodeDTO } from './dto/generate-invite-code.dto';
+import {v4 as uuidv4} from 'uuid';
+import { RedisService } from 'src/common/utils/redis.service';
 
 @Injectable()
 export class UsersService {
@@ -20,6 +24,7 @@ export class UsersService {
     private userRepo: UserRepository,
     private venueService: VenueService,
     private tagService: TagService,
+    private redisService: RedisService
   ) {}
 
   async getAllUsers() {
@@ -37,6 +42,37 @@ export class UsersService {
     }
     return user;
   }
+
+
+  async generateInvite(dto: GenerateUserInviteCodeDTO, adminVenueId: string, adminTagName: string): Promise<string> {
+    // check if user is already invited
+    const user = await this.userRepo.findByEmailWithRelations(dto.email);
+    if (user?.venue.id === adminVenueId) {
+      throw new HttpException('User is already invited', 409);
+    }
+    // generate uuid
+    const inviteId = uuidv4()
+    // get tag, for tag id validation
+   const userTag =  await this.tagService.findOne(dto.tagId);
+   const adminTag = await this.tagService.findTagByName(adminTagName);
+   if (userTag?.name === "Owner" && adminTag?.name !== "Owner") {
+    throw new HttpException('Admin cannot invite an owner', 400);
+   }
+    const inviteData = {
+      tagId: dto.tagId,
+      adminVenueId
+    }
+    const cacheKey = `${inviteId}-${dto.email}`
+    const cacheValue = JSON.stringify(inviteData)
+    await this.redisService.set(cacheKey, cacheValue, 60 * 60 * 24) // expires in a day
+    // TODO: might want to add the invideId to the fronted query param url for registration
+    // Also send and invite email to the user invited
+    return inviteId
+
+  }
+
+
+
 
   async createAdminUser(dto: CreateAdminUserDTO): Promise<User> {
     await this.ensureUserUniqueness(dto.email, dto.telephone);
@@ -56,6 +92,33 @@ export class UsersService {
     const user = this.userRepo.create(userData);
     // TODO: Send a welcome email and verification code via RabbitMQ/Redis
     return await this.userRepo.save(user);
+  }
+
+
+  async createOtherUser(dto: CreateOtherUserDTO): Promise<User> {
+    await this.ensureUserUniqueness(dto.email, dto.telephone);
+    const cacheKey = `${dto.inviteCode}-${dto.email}`
+    const cacheValue = await this.redisService.get(cacheKey)
+    const parsedCacheValue = JSON.parse(cacheValue);
+
+    const tag = await this.tagService.findOne(parsedCacheValue.tagId);
+    const venue = await this.venueService.findOne(parsedCacheValue.adminVenueId);
+    const hashedPassword = await this.hashPassword(dto.password);
+    if (!tag || !venue) {
+      throw new HttpException('Invalid invite code', 400);
+    }
+    // remove invitecode from the dto
+    delete (dto as Partial<CreateOtherUserDTO>).inviteCode;
+    const userData = {
+      ...dto,
+      password: hashedPassword,
+      venue,
+      tag,
+    };
+    const user = this.userRepo.create(userData);
+    await this.redisService.del(cacheKey)
+    return await this.userRepo.save(user);
+
   }
   
 
