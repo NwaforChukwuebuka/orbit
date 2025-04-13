@@ -12,7 +12,7 @@ import { VenueRulesModule } from './venue_rules/venue_rules.module';
 import { UserStreakModule } from './user_streak/user_streak.module';
 import { AuthModule } from './auth/auth.module';
 import { TagModule } from './tag/tag.module';
-
+import { SectionModule } from './section/section.module';
 @Module({
   imports: [
     TypeOrmModule,
@@ -29,6 +29,7 @@ import { TagModule } from './tag/tag.module';
     UserStreakModule,
     AuthModule,
     TagModule,
+    SectionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
