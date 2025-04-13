@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { BookingSettings } from 'src/booking_settings/booking_settings.entity';
+import { WorkStation } from 'src/work_station/work_station.entity';
 
 @Entity('venues')
 export class Venue {
@@ -70,6 +71,9 @@ export class Venue {
     {},
   )
   bookingSettings: BookingSettings;
+
+  @OneToMany(() => WorkStation, (workStation) => workStation.venue)
+  workStations: WorkStation[];
 }
 
 @Entity('hours_of_availability')

@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Section } from './section.entity';
@@ -15,58 +21,71 @@ export class SectionService {
   ) {}
 
   async findAll(): Promise<Section[]> {
-    return this.sectionRepository.find({ 
-      relations: ['workStation', 'spots'] 
+    return this.sectionRepository.find({
+      relations: ['workStation', 'spots'],
     });
   }
 
   async findOne(id: string): Promise<Section> {
-    const section = await this.sectionRepository.findOne({ 
+    const section = await this.sectionRepository.findOne({
       where: { id },
-      relations: ['workStation', 'spots'] 
+      relations: ['workStation', 'spots'],
     });
-    
+
     if (!section) {
       throw new NotFoundException(`Section with ID ${id} not found`);
     }
-    
+
     return section;
   }
 
   async create(createSectionDto: CreateSectionDto): Promise<Section> {
     // First verify that the workStation exists
-    const workStation = await this.workStationService.findOne(createSectionDto.workStationId);
-    
+    const workStation = await this.workStationService.findOne(
+      createSectionDto.workStationId,
+    );
+
     if (!workStation) {
-      throw new BadRequestException(`WorkStation with ID ${createSectionDto.workStationId} not found`);
+      throw new BadRequestException(
+        `WorkStation with ID ${createSectionDto.workStationId} not found`,
+      );
     }
 
     const section = this.sectionRepository.create({
       name: createSectionDto.name,
       description: createSectionDto.description,
-      isActive: createSectionDto.isActive ?? true,
-      workStation
+      isOpen: createSectionDto.isOpen ?? true,
+      workStation,
     });
 
     return this.sectionRepository.save(section);
   }
 
-  async update(id: string, updateSectionDto: UpdateSectionDto): Promise<Section> {
+  async update(
+    id: string,
+    updateSectionDto: UpdateSectionDto,
+  ): Promise<Section> {
     const section = await this.findOne(id);
 
     if (updateSectionDto.workStationId) {
       // Verify that the new workStation exists if it's being updated
-      const workStation = await this.workStationService.findOne(updateSectionDto.workStationId);
+      const workStation = await this.workStationService.findOne(
+        updateSectionDto.workStationId,
+      );
       if (!workStation) {
-        throw new BadRequestException(`WorkStation with ID ${updateSectionDto.workStationId} not found`);
+        throw new BadRequestException(
+          `WorkStation with ID ${updateSectionDto.workStationId} not found`,
+        );
       }
       section.workStation = workStation;
     }
 
     // Update other fields if provided
     if (updateSectionDto.name) section.name = updateSectionDto.name;
-    if (updateSectionDto.description !== undefined) section.description = updateSectionDto.description;
-    if (updateSectionDto.isActive !== undefined) section.isActive = updateSectionDto.isActive;
+    if (updateSectionDto.description !== undefined)
+      section.description = updateSectionDto.description;
+    if (updateSectionDto.isOpen !== undefined)
+      section.isOpen = updateSectionDto.isOpen;
 
     return this.sectionRepository.save(section);
   }

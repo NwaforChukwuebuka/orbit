@@ -1,5 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { Venue } from '../venue/venue.entity';
+import { Section } from 'src/section/section.entity';
 
 @Entity('work_stations')
 export class WorkStation {
@@ -15,16 +25,22 @@ export class WorkStation {
   @Column()
   city: string;
 
+  @Column({ name: 'is_open' })
+  isOpen: boolean;
+
   @Column({ name: 'zip_code' })
   zipCode: number;
 
-  @ManyToOne(() => Venue)
+  @ManyToOne(() => Venue, (venue) => venue.workStations)
   @JoinColumn({ name: 'venue_id' })
   venue: Venue;
 
-  @Column({ name: 'created_at', type: 'date' })
+  @OneToMany(() => Section, (section) => section.workStation)
+  sections: Section[];
+
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ name: 'updated_at', type: 'date' })
+  @UpdateDateColumn()
   updatedAt: Date;
-} 
+}
