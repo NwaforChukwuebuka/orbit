@@ -16,6 +16,7 @@ import { Venue } from 'src/venue/venue.entity';
 import { GenerateUserInviteCodeDTO } from './dto/generate-invite-code.dto';
 import {v4 as uuidv4} from 'uuid';
 import { RedisService } from 'src/common/utils/redis.service';
+import { TaskService } from 'src/task/task.service';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +25,8 @@ export class UsersService {
     private userRepo: UserRepository,
     private venueService: VenueService,
     private tagService: TagService,
-    private redisService: RedisService
+    private redisService: RedisService,
+    private taskService: TaskService,
   ) {}
 
   async getAllUsers() {
@@ -100,6 +102,12 @@ export class UsersService {
   
     const user = this.userRepo.create(userData);
     // TODO: Send a welcome email and verification code via RabbitMQ/Redis
+    const mailData = {
+      to: dto.email,
+      subject: 'Welcome to Orbit',
+      text: `Welcome to Orbit, ${dto.firstName} ${dto.lastName}! Your account has been created successfully. Please login to your account to get started.`
+    }
+    await this.taskService.sendMailTask(mailData);
     return await this.userRepo.save(user);
   }
 

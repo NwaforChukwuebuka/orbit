@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Spot } from './spot.entity';
@@ -20,61 +25,57 @@ export class SpotService {
   async create(createSpotDto: CreateSpotDto): Promise<Spot> {
     try {
       const { sectionId, ...spotData } = createSpotDto;
-      
+
       // Verify section exists
       const sectionExists = await this.spotRepository.manager.findOne(Section, {
-        where: { id: sectionId }
+        where: { id: sectionId },
       });
-      
+
       if (!sectionExists) {
-        throw new BadRequestException(`Section with ID ${sectionId} does not exist`);
+        throw new BadRequestException(
+          `Section with ID ${sectionId} does not exist`,
+        );
       }
 
       const spot = this.spotRepository.create({
         ...spotData,
         section: { id: sectionId } as Section,
-        createdAt: new Date(),
-        updatedAt: this.getCurrentTimestamp(),
       });
       return await this.spotRepository.save(spot);
     } catch (error) {
       if (error instanceof BadRequestException) throw error;
-      throw new BadRequestException(
-        `Failed to create spot: ${error.message}`
-      );
+      throw new BadRequestException(`Failed to create spot: ${error.message}`);
     }
   }
 
   async findAll(): Promise<Spot[]> {
     try {
       return await this.spotRepository.find({
-        relations: ['section']
+        relations: ['section'],
       });
     } catch (error) {
       throw new BadRequestException(
-        `Failed to retrieve spots: ${error.message}`
+        `Failed to retrieve spots: ${error.message}`,
       );
     }
   }
 
   async findOne(id: string): Promise<Spot> {
     try {
-      const spot = await this.spotRepository.findOne({ 
+      const spot = await this.spotRepository.findOne({
         where: { id },
-        relations: ['section'] 
+        relations: ['section'],
       });
-      
+
       if (!spot) {
-        throw new NotFoundException(
-          `Spot with ID ${id} not found`
-        );
+        throw new NotFoundException(`Spot with ID ${id} not found`);
       }
-      
+
       return spot;
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
       throw new BadRequestException(
-        `Failed to retrieve spot with ID ${id}: ${error.message}`
+        `Failed to retrieve spot with ID ${id}: ${error.message}`,
       );
     }
   }
@@ -82,28 +83,30 @@ export class SpotService {
   async update(id: string, updateSpotDto: UpdateSpotDto): Promise<Spot> {
     try {
       const { sectionId, ...spotData } = updateSpotDto;
-      
+
       // First check if spot exists
       await this.findOne(id);
-      
+
       // If sectionId provided, verify it exists
       if (sectionId) {
-        const sectionExists = await this.spotRepository.manager.findOne(Section, {
-          where: { id: sectionId }
-        });
-        
+        const sectionExists = await this.spotRepository.manager.findOne(
+          Section,
+          {
+            where: { id: sectionId },
+          },
+        );
+
         if (!sectionExists) {
           throw new BadRequestException(
-            `Section with ID ${sectionId} does not exist`
+            `Section with ID ${sectionId} does not exist`,
           );
         }
       }
 
       const updateData: Partial<Spot> = {
         ...spotData,
-        updatedAt: this.getCurrentTimestamp(),
       };
-      
+
       if (sectionId) {
         updateData.section = { id: sectionId } as Section;
       }
@@ -111,9 +114,13 @@ export class SpotService {
       await this.spotRepository.update(id, updateData);
       return this.findOne(id);
     } catch (error) {
-      if (error instanceof NotFoundException || error instanceof BadRequestException) throw error;
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      )
+        throw error;
       throw new BadRequestException(
-        `Failed to update spot with ID ${id}: ${error.message}`
+        `Failed to update spot with ID ${id}: ${error.message}`,
       );
     }
   }
@@ -122,17 +129,17 @@ export class SpotService {
     try {
       // First check if spot exists
       await this.findOne(id);
-      
+
       const result = await this.spotRepository.delete(id);
       if (result.affected === 0) {
         throw new NotFoundException(
-          `Failed to delete spot with ID ${id}: Spot not found`
+          `Failed to delete spot with ID ${id}: Spot not found`,
         );
       }
     } catch (error) {
       if (error instanceof NotFoundException) throw error;
       throw new BadRequestException(
-        `Failed to delete spot with ID ${id}: ${error.message}`
+        `Failed to delete spot with ID ${id}: ${error.message}`,
       );
     }
   }

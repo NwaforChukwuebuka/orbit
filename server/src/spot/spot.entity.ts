@@ -4,6 +4,8 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Section } from '../section/section.entity';
 import { ApiProperty } from '@nestjs/swagger';
@@ -27,7 +29,7 @@ export class Spot {
     example: true,
     default: true,
   })
-  @Column({ name: 'is_available' })
+  @Column({ name: 'is_available', default: true })
   isAvailable: boolean;
 
   @ApiProperty({
@@ -45,21 +47,24 @@ export class Spot {
     description: 'The section this spot belongs to',
     type: () => Section,
   })
-  @ManyToOne(() => Section)
+  @ManyToOne(() => Section, (section) => section.spots)
   @JoinColumn({ name: 'section_id' })
   section: Section;
+
+  @Column({ default: true })
+  isAvailableForBooking: boolean;
 
   @ApiProperty({
     description: 'Date when the spot was created',
     example: '2024-03-15',
   })
-  @Column({ name: 'created_at', type: 'date' })
+  @CreateDateColumn()
   createdAt: Date;
 
   @ApiProperty({
     description: 'Timestamp of the last update',
-    example: 1710489600000,
+    example: '2024-03-15',
   })
-  @Column({ name: 'updated_at' })
-  updatedAt: number;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

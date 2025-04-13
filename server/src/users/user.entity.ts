@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,11 +6,13 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 import { Venue } from 'src/venue/venue.entity';
 import { Booking } from 'src/booking/booking.entity';
 import { Tag } from 'src/tag/tag.entity';
 import { Exclude } from 'class-transformer';
+import { UserStreak } from 'src/user_streak/user_streak.entity';
 
 @Entity('users')
 export class User {
@@ -52,4 +52,10 @@ export class User {
 
   @ManyToOne(() => Tag, (tag) => tag.users)
   tag: Tag;
+
+  @OneToOne(() => UserStreak, (streak) => streak.user, {
+    cascade: true,
+    nullable: true,
+  })
+  streak?: UserStreak;
 }

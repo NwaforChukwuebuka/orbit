@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinColumn,
+  OneToOne,
+} from 'typeorm';
 import { Venue } from '../venue/venue.entity';
+import { LockInPolicy } from './types/lock-in-policy.enum';
 
 @Entity('booking_settings')
 export class BookingSettings {
@@ -10,7 +17,7 @@ export class BookingSettings {
   visibiltyRules: any;
 
   @Column({ name: 'lock_in_policy' })
-  lockInPolicy: string;
+  lockInPolicy: LockInPolicy;
 
   @Column({ name: 'allow_repeat' })
   allowRepeat: boolean;
@@ -18,7 +25,7 @@ export class BookingSettings {
   @Column({ name: 'allow_spot_swap' })
   allowSpotSwap: boolean;
 
-  @ManyToOne(() => Venue)
-  @JoinColumn({ name: 'venue' })
+  @OneToOne(() => Venue, (venue) => venue.bookingSettings, { cascade: true })
+  @JoinColumn()
   venue: Venue;
-} 
+}

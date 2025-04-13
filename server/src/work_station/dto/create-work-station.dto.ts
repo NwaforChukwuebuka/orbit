@@ -4,7 +4,7 @@ import { IsString, IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 export class CreateWorkStationDto {
   @ApiProperty({
     description: 'Name of the work station',
-    example: 'Main Floor Workspace'
+    example: 'Main Floor Workspace',
   })
   @IsString()
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class CreateWorkStationDto {
 
   @ApiProperty({
     description: 'Street address of the work station',
-    example: '123 Business Avenue'
+    example: '123 Business Avenue',
   })
   @IsString()
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class CreateWorkStationDto {
 
   @ApiProperty({
     description: 'City where the work station is located',
-    example: 'New York'
+    example: 'New York',
   })
   @IsString()
   @IsNotEmpty()
@@ -28,7 +28,7 @@ export class CreateWorkStationDto {
 
   @ApiProperty({
     description: 'ZIP code of the work station location',
-    example: 10001
+    example: 10001,
   })
   @IsNumber()
   @IsNotEmpty()
@@ -36,9 +36,9 @@ export class CreateWorkStationDto {
 
   @ApiProperty({
     description: 'ID of the venue this work station belongs to',
-    example: '123e4567-e89b-12d3-a456-426614174000'
+    example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @IsUUID()
   @IsNotEmpty()
   venueId: string;
-} 
+}

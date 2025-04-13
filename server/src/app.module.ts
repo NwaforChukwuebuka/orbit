@@ -12,6 +12,9 @@ import { VenueRulesModule } from './venue_rules/venue_rules.module';
 import { UserStreakModule } from './user_streak/user_streak.module';
 import { AuthModule } from './auth/auth.module';
 import { TagModule } from './tag/tag.module';
+import { EmailModule } from './email/email.module';
+import { BullModule } from '@nestjs/bull';
+import { TaskModule } from './task/task.module';
 import { SectionModule } from './section/section.module';
 @Module({
   imports: [
@@ -19,6 +22,12 @@ import { SectionModule } from './section/section.module';
     ConfigModule.forRoot({
       envFilePath: ['.env'],
       isGlobal: true,
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
     }),
     UsersModule,
     VenueModule,
@@ -29,6 +38,8 @@ import { SectionModule } from './section/section.module';
     UserStreakModule,
     AuthModule,
     TagModule,
+    EmailModule,
+    TaskModule,
     SectionModule,
   ],
   controllers: [AppController],

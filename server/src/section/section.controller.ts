@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Controller,
   Get,
@@ -52,8 +53,13 @@ export class SectionController {
     },
   })
   @ApiResponse({ status: 400, description: 'Invalid section data provided' })
-  create(@Body() createSectionDto: CreateSectionDto) {
-    return this.sectionService.create(createSectionDto);
+  async create(@Body() createSectionDto: CreateSectionDto) {
+    const data = await this.sectionService.create(createSectionDto);
+    return {
+      message: 'Section Successfully Created!',
+      data,
+      statusCode: 201,
+    };
   }
 
   @Get()

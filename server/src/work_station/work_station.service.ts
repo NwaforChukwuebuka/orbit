@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkStation } from './work_station.entity';
@@ -13,44 +17,54 @@ export class WorkStationService {
     private venueService: VenueService,
   ) {}
 
-  async create(createWorkStationDto: CreateWorkStationDto): Promise<WorkStation> {
+  async create(
+    createWorkStationDto: CreateWorkStationDto,
+  ): Promise<WorkStation> {
     // First verify that the venue exists
     const venue = await this.venueService.findOne(createWorkStationDto.venueId);
-    
+
     if (!venue) {
-      throw new BadRequestException(`Venue with ID ${createWorkStationDto.venueId} not found`);
+      throw new BadRequestException(
+        `Venue with ID ${createWorkStationDto.venueId} not found`,
+      );
     }
 
     const workStation = this.workStationRepository.create({
       ...createWorkStationDto,
       venue,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
-    
+
     return this.workStationRepository.save(workStation);
   }
 
   async findAll(): Promise<WorkStation[]> {
     return this.workStationRepository.find({
-      relations: ['venue', 'spots']
+      relations: ['venue', 'sections'],
     });
   }
 
+  // TODO Refactor without relations: currently inefficient for query for just workstation primary datas
+  // ask for what you need
   async findOne(id: string): Promise<WorkStation> {
-    const workStation = await this.workStationRepository.findOne({ 
+    const workStation = await this.workStationRepository.findOne({
       where: { id },
-      relations: ['venue', 'spots']
+      relations: ['venue', 'sections', 'sections.spots'],
     });
-    
+
     if (!workStation) {
       throw new NotFoundException(`WorkStation with ID ${id} not found`);
     }
-    
+
     return workStation;
   }
 
-  async update(id: string, updateWorkStationDto: Partial<WorkStation>): Promise<WorkStation> {
+  // TODO add another with relations
+  // which will just be use when we need workstation and its related datas
+
+  async update(
+    id: string,
+    updateWorkStationDto: Partial<WorkStation>,
+  ): Promise<WorkStation> {
     await this.findOne(id);
     await this.workStationRepository.update(id, {
       ...updateWorkStationDto,
