@@ -1,8 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Venue } from '../venue/venue.entity';
-import { Spot } from '../spot/spot.entity';
 
-@Entity('work_station')
+@Entity('work_stations')
 export class WorkStation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -28,7 +27,4 @@ export class WorkStation {
 
   @Column({ name: 'updated_at', type: 'date' })
   updatedAt: Date;
-
-  @OneToMany(() => Spot, spot => spot.workStation)
-  spots: Spot[];
 } 
