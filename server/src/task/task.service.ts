@@ -7,6 +7,7 @@ export class TaskService {
   constructor(@InjectQueue('emailQueue') private emailQueue: Queue) {}
 
   async sendMailTask(data: any) {
-    await this.emailQueue.add('sendMail', data);
+    console.log('sendMailTask', data);
+    await this.emailQueue.add('sendEmail', data);
   }
 }

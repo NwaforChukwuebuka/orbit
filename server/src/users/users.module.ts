@@ -8,9 +8,10 @@ import { redisClientFactory } from 'src/common/utils/redis.client.factory';
 
 import { TagModule } from 'src/tag/tag.module';
 import { VenueModule } from 'src/venue/venue.module';
+import { TaskModule } from 'src/task/task.module';
 
 @Module({
-  imports: [TagModule, VenueModule],
+  imports: [TagModule, VenueModule, TaskModule],
   providers: [
     UsersService,
     {

@@ -9,6 +9,7 @@ export class EmailProcessor {
   constructor(private readonly emailService: EmailService) {}
   @Process('sendEmail')
   async handleSendEmail(job: Job) {
+    console.log('email task received!');
     const { to, subject, text } = job.data;
     await this.emailService.sendEmail(to, subject, text);
     console.log(`Email sent to ${to}`);
