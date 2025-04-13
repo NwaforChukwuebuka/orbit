@@ -3,12 +3,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import nodemailer, { Transporter } from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import { LoggerService } from 'src/common/utils/logger.service';
 
 @Injectable()
 export class EmailService {
-  private transporter: Transporter;
+  private transporter: nodemailer.Transporter;
 
   constructor(
     private configService: ConfigService,
