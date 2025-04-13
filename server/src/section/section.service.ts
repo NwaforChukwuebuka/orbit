@@ -39,6 +39,8 @@ export class SectionService {
 
   async create(createSectionDto: CreateSectionDto): Promise<any> {
     // First verify that the workStation exists
+    // TODO: is the currently inefficient as it queries the workstation and and its relations, for this
+    // you might want to have custom workstation repository isExist method that just returns bools or in the service
     const workStation = await this.workStationService.findOne(
       createSectionDto.workStationId,
     );
