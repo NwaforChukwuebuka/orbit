@@ -10,6 +10,7 @@ import { Tag } from 'src/tag/tag.entity';
 import { Section } from 'src/section/section.entity';
 import { WorkStation } from 'src/work_station/work_station.entity';
 import { Spot } from 'src/spot/spot.entity';
+import { UserStreak } from 'src/user_streak/user_streak.entity';
 
 @Global()
 @Module({
@@ -33,7 +34,16 @@ import { Spot } from 'src/spot/spot.entity';
             username: configService.get('DB_USERNAME'),
             password: configService.get('DB_PASSWORD'),
             database: configService.get('DB_NAME'),
-            entities: [User, Venue, Booking, Tag, Section, WorkStation, Spot],
+            entities: [
+              User,
+              Venue,
+              Booking,
+              Tag,
+              Section,
+              WorkStation,
+              Spot,
+              UserStreak,
+            ],
             synchronize: true,
           });
           await dataSource.initialize();

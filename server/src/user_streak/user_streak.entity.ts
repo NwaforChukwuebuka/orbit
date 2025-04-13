@@ -2,8 +2,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { User } from '../users/user.entity';
 
@@ -12,9 +12,12 @@ export class UserStreak {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => User)
+  @OneToOne(() => User, (user) => user.streak, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
   @JoinColumn({ name: 'user' })
-  user: User;
+  user?: User;
 
   @Column({ name: 'last_activity_date', type: 'date' })
   lastActivityDate: Date;
