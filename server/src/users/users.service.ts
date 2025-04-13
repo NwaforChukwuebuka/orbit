@@ -31,6 +31,15 @@ export class UsersService {
     return await this.userRepo.find();
   }
 
+  async getUsersInAVenue(venueId: string): Promise<User[]> {
+    return this.userRepo.find({
+      where: {
+        venue: { id: venueId },
+      },
+      relations: ['venue'],
+    });
+  }
+
   async findUserByEmail(email: string) {
     return await this.userRepo.findByEmail(email);
   }
