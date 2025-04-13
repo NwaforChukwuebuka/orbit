@@ -15,4 +15,8 @@ export class VenueService {
     const venue = this.venueRepository.create(createVenuePayload);
     return this.venueRepository.save(venue);
   }
+
+  async findOne(id: string): Promise<Venue | null> {
+    return await this.venueRepository.findOneBy({ id });
+  }
 }

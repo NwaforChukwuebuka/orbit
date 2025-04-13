@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsPhoneNumber,
   IsString,
+  IsUUID,
   Matches,
   MinLength,
 } from 'class-validator';
@@ -40,6 +41,40 @@ export class CreateAdminUserDTO {
   @IsNotEmpty()
   @IsString()
   venueSubdomain: string;
+
+  @IsPhoneNumber()
+  @IsNotEmpty()
+  telephone: string;
+}
+
+export class CreateOtherUserDTO {
+  @IsNotEmpty()
+  @IsString()
+  firstName: string;
+
+  @IsNotEmpty()
+  @IsUUID()
+  inviteCode: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lastName: string;
+
+  @IsNotEmpty()
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    {
+      message:
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+    },
+  )
+  password: string;
 
   @IsPhoneNumber()
   @IsNotEmpty()
