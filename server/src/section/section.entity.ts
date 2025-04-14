@@ -1,4 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { WorkStation } from '../work_station/work_station.entity';
 import { Spot } from '../spot/spot.entity';
 
@@ -14,13 +23,13 @@ export class Section {
   description: string;
 
   @Column({ default: true })
-  isActive: boolean;
+  isOpen: boolean;
 
-  @ManyToOne(() => WorkStation)
+  @ManyToOne(() => WorkStation, (workStation) => workStation.sections)
   @JoinColumn({ name: 'work_station_id' })
   workStation: WorkStation;
 
-  @OneToMany(() => Spot, spot => spot.section)
+  @OneToMany(() => Spot, (spot) => spot.section)
   spots: Spot[];
 
   @CreateDateColumn()
@@ -28,4 +37,4 @@ export class Section {
 
   @UpdateDateColumn()
   updatedAt: Date;
-} 
+}

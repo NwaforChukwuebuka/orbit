@@ -4,9 +4,14 @@ import { Global, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { User } from 'src/users/user.entity';
-import { Venue } from 'src/venue/venue.entity';
+import { HoursOfAvailability, Venue } from 'src/venue/venue.entity';
 import { Booking } from 'src/booking/booking.entity';
 import { Tag } from 'src/tag/tag.entity';
+import { Section } from 'src/section/section.entity';
+import { WorkStation } from 'src/work_station/work_station.entity';
+import { Spot } from 'src/spot/spot.entity';
+import { UserStreak } from 'src/user_streak/user_streak.entity';
+import { BookingSettings } from 'src/booking_settings/booking_settings.entity';
 
 @Global()
 @Module({
@@ -30,7 +35,18 @@ import { Tag } from 'src/tag/tag.entity';
             username: configService.get('DB_USERNAME'),
             password: configService.get('DB_PASSWORD'),
             database: configService.get('DB_NAME'),
-            entities: [User, Venue, Booking, Tag],
+            entities: [
+              User,
+              Venue,
+              Booking,
+              Tag,
+              Section,
+              WorkStation,
+              Spot,
+              UserStreak,
+              HoursOfAvailability,
+              BookingSettings,
+            ],
             synchronize: true,
           });
           await dataSource.initialize();

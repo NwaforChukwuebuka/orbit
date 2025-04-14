@@ -1,10 +1,16 @@
-import { IsNotEmpty, IsString, IsOptional, IsBoolean, IsUUID } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsUUID,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateSectionDto {
   @ApiProperty({
     description: 'Section name',
-    example: 'Quiet Zone A'
+    example: 'Quiet Zone A',
   })
   @IsNotEmpty()
   @IsString()
@@ -12,7 +18,8 @@ export class CreateSectionDto {
 
   @ApiPropertyOptional({
     description: 'Section description',
-    example: 'A quiet workspace area with 10 individual desks, perfect for focused work'
+    example:
+      'A quiet workspace area with 10 individual desks, perfect for focused work',
   })
   @IsOptional()
   @IsString()
@@ -21,17 +28,17 @@ export class CreateSectionDto {
   @ApiPropertyOptional({
     description: 'Section active status',
     default: true,
-    example: true
+    example: true,
   })
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean;
+  isOpen?: boolean;
 
   @ApiProperty({
     description: 'ID of the work station this section belongs to',
-    example: '987fcdeb-a654-12d3-b456-426614174000'
+    example: '987fcdeb-a654-12d3-b456-426614174000',
   })
   @IsNotEmpty()
   @IsUUID()
   workStationId: string;
-} 
+}

@@ -15,7 +15,7 @@ import { TagModule } from './tag/tag.module';
 import { EmailModule } from './email/email.module';
 import { BullModule } from '@nestjs/bull';
 import { TaskModule } from './task/task.module';
-
+import { SectionModule } from './section/section.module';
 @Module({
   imports: [
     TypeOrmModule,
@@ -40,6 +40,7 @@ import { TaskModule } from './task/task.module';
     TagModule,
     EmailModule,
     TaskModule,
+    SectionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
