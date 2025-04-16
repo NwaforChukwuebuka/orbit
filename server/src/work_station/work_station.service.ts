@@ -48,13 +48,23 @@ export class WorkStationService {
   async findOne(id: string): Promise<WorkStation> {
     const workStation = await this.workStationRepository.findOne({
       where: { id },
-      relations: ['venue', 'sections', 'sections.spots'],
     });
 
     if (!workStation) {
       throw new NotFoundException(`WorkStation with ID ${id} not found`);
     }
 
+    return workStation;
+  }
+
+  async findOneWithDetails(id: string): Promise<WorkStation> {
+    const workStation = await this.workStationRepository.findOne({
+      where: { id },
+      relations: ['venue', 'sections'],
+    });
+    if (!workStation) {
+      throw new NotFoundException(`WorkStation with ID ${id} not found`);
+    }
     return workStation;
   }
 

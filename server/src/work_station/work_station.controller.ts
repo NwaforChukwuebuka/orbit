@@ -134,8 +134,13 @@ export class WorkStationController {
     },
   })
   @ApiResponse({ status: 404, description: 'Work station not found' })
-  findOne(@Param('id') id: string) {
-    return this.workStationService.findOne(id);
+  async getWorkSpaceDetails(@Param('id') id: string) {
+    const data = await this.workStationService.findOneWithDetails(id);
+    return {
+      message: 'Details Fetched successfully',
+      data: data,
+      statusCode: 200,
+    };
   }
 
   @Patch(':id')
