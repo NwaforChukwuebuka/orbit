@@ -24,7 +24,7 @@ Orbit Co-workingspace platform allows co-workspace owners to have clients book s
 - Booking Streak
 
 
-### Non Functional Requirements
+### Non Functional Requirements
 - High Availability
 - Low Latency
 - Scalability
@@ -36,13 +36,9 @@ Orbit Co-workingspace platform allows co-workspace owners to have clients book s
 - Nextjs
 - Bull for task queue
 - Redis for cache and task queue broker
-- Realtime Events and Updates - Firebase Real-Database
+- Realtime Events and Updates - Firebase Realtime-Database
 - Docker/Docker compose
 - Amazon Q for completions and Coding Assistant
-
-
-
-
 
 
 
