@@ -43,8 +43,6 @@ export class WorkStationService {
     });
   }
 
-  // TODO Refactor without relations: currently inefficient for query for just workstation primary datas
-  // ask for what you need
   async findOne(id: string): Promise<WorkStation> {
     const workStation = await this.workStationRepository.findOne({
       where: { id },
@@ -67,9 +65,6 @@ export class WorkStationService {
     }
     return workStation;
   }
-
-  // TODO add another with relations
-  // which will just be use when we need workstation and its related datas
 
   async update(
     id: string,
