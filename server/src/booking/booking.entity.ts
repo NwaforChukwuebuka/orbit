@@ -1,5 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
+import { Spot } from 'src/spot/spot.entity';
 
 @Entity('bookings')
 export class Booking {
@@ -21,10 +29,13 @@ export class Booking {
   @Column({ name: 'is_expired' })
   isExpired: boolean;
 
-  @Column({ name: 'created_at' })
+  @ManyToOne(() => Spot, (spot) => spot.booking)
+  spot: Spot;
+
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ name: 'updated_at' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.bookings)
