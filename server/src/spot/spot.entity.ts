@@ -64,7 +64,7 @@ export class Spot {
   createdAt: Date;
 
   @OneToMany(() => Booking, (booking) => booking.spot)
-  booking: Booking;
+  bookings: Booking;
 
   @ApiProperty({
     description: 'Timestamp of the last update',

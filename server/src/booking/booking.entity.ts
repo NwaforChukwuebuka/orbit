@@ -29,14 +29,20 @@ export class Booking {
   @Column({ name: 'is_expired' })
   isExpired: boolean;
 
-  @ManyToOne(() => Spot, (spot) => spot.booking)
+  @ManyToOne(() => Spot, (spot) => spot.bookings)
   spot: Spot;
 
-  @Column({ type: 'timestamp' })
-  startDateTime: Date;
+  @Column()
+  startDate: Date;
+
+  @Column()
+  endDate: Date;
 
   @Column({ type: 'timestamp' })
-  endDateTime: Date;
+  startTime: Date;
+
+  @Column({ type: 'timestamp' })
+  endTime: Date;
 
   @CreateDateColumn()
   createdAt: Date;

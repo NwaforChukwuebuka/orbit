@@ -59,6 +59,28 @@ export class SpotService {
       );
     }
   }
+  // getspotswith booked status
+  async getSpotsBySectionAndTime(sectionId: string, date: Date) {
+    const spots = await this.spotRepository
+      .createQueryBuilder('spot')
+      .leftJoin('spot.bookings', 'bookings')
+      .where('spot.section.id = :sectionId', { sectionId })
+      .loadRelationCountAndMap(
+        'spot.bookingsAtTime',
+        'spot.bookings',
+        'bookings',
+        (qb) =>
+          qb.where(':date BETWEEN bookings.startDate AND bookings.endDate', {
+            date,
+          }),
+      )
+      .getMany();
+
+    return spots.map((spot) => ({
+      ...spot,
+      isBooked: (spot as any).bookingsAtTime > 0,
+    }));
+  }
 
   async findOne(id: string): Promise<Spot> {
     try {
