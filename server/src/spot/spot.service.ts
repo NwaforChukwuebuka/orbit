@@ -86,7 +86,6 @@ export class SpotService {
     try {
       const spot = await this.spotRepository.findOne({
         where: { id },
-        relations: ['section'],
       });
 
       if (!spot) {

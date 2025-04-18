@@ -15,10 +15,7 @@ export class Booking {
   id: string;
 
   @Column()
-  status: string;
-
-  @Column()
-  reference: string;
+  title: string;
 
   @Column({ name: 'qr_code_url' })
   qrCodeUrl: string;
@@ -34,9 +31,6 @@ export class Booking {
 
   @Column()
   startDate: Date;
-
-  @Column()
-  endDate: Date;
 
   @Column({ type: 'timestamp' })
   startTime: Date;
