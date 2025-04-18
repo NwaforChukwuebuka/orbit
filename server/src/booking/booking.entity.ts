@@ -32,6 +32,12 @@ export class Booking {
   @ManyToOne(() => Spot, (spot) => spot.booking)
   spot: Spot;
 
+  @Column({ type: 'timestamp' })
+  startDateTime: Date;
+
+  @Column({ type: 'timestamp' })
+  endDateTime: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 
