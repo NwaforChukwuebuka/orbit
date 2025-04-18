@@ -8,5 +8,6 @@ export class TaskService {
 
   async sendMailTask(data: any) {
     await this.emailQueue.add('sendEmail', data);
+    return;
   }
 }
