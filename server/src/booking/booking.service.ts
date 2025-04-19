@@ -62,6 +62,7 @@ export class BookingService {
     // send this to a queue
     await this.taskService.sendToFirebaseTask(firebaseData);
     // update booking streak
+    await this.taskService.updateUserStreakTask(fetchedUser);
     // send email to the user
     const bookDate = new Date(data.date).toLocaleDateString();
     const from = new Date(data.startTime).toLocaleTimeString();
