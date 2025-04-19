@@ -14,23 +14,23 @@ export class Booking {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   title: string;
 
-  @Column({ name: 'qr_code_url' })
+  @Column({ name: 'qr_code_url', nullable: true })
   qrCodeUrl: string;
 
-  @Column({ name: 'checked_in' })
+  @Column({ name: 'checked_in', default: false })
   checkedIn: boolean;
 
-  @Column({ name: 'is_expired' })
+  @Column({ name: 'is_expired', default: false })
   isExpired: boolean;
 
   @ManyToOne(() => Spot, (spot) => spot.bookings)
   spot: Spot;
 
   @Column()
-  startDate: Date;
+  date: Date;
 
   @Column({ type: 'timestamp' })
   startTime: Date;

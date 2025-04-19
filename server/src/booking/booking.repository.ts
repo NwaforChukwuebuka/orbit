@@ -13,13 +13,11 @@ export class BookingRepository extends Repository<Booking> {
 
   //   check if a spot is booked
   async isSpotBooked(spotId: string, date: Date): Promise<boolean> {
-    const bookings = await this.find({
-      where: {
-        spot: { id: spotId },
-        startDate: date,
-        isExpired: false,
-      },
-    });
+    const bookings = await this.createQueryBuilder('bookings')
+      .where('bookings.spotId = :spotId', { spotId })
+      .andWhere('bookings.date = :date', { date })
+      .andWhere('bookings.isExpired = false')
+      .getMany();
 
     return bookings.length > 0;
   }

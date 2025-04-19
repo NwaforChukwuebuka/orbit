@@ -70,7 +70,7 @@ export class SpotService {
         'spot.bookings',
         'bookings',
         (qb) =>
-          qb.where(':date BETWEEN bookings.startDate AND bookings.endDate', {
+          qb.where(':date BETWEEN bookings.date AND bookings.date', {
             date,
           }),
       )

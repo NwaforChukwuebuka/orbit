@@ -20,9 +20,11 @@ export class BookingService {
     // get user and spot from payload
     const { user, spot } = bookingPayload;
 
+    console.log('this is the payload: ', bookingPayload);
+
     // gotta check if spot is available
     const isBooked = await this.bookingRepo.isSpotBooked(
-      bookingPayload.spot,
+      spot,
       bookingPayload.date,
     );
     if (isBooked) {
@@ -32,6 +34,10 @@ export class BookingService {
     bookingPayload.user = fetchedUser;
 
     bookingPayload.spot = fetchedSpot;
+    bookingPayload.startTime = new Date(bookingPayload.startTime);
+    bookingPayload.endTime = new Date(bookingPayload.endTime);
+
+    // TODO: Check booking settings for data before continuing to book
     // TODO: handle repeat bookings
     const booking = this.bookingRepo.create(bookingPayload);
     return await this.bookingRepo.save(booking);
