@@ -31,9 +31,9 @@ export class BookingService {
       spot,
       bookingPayload.date,
     );
-    // if (isBooked) {
-    //   throw new HttpException('Spot Booked by another user', 400);
-    // }
+    if (isBooked) {
+      throw new HttpException('Spot Booked by another user', 400);
+    }
     const [fetchedSpot, fetchedUser] = await this.getSpotAndUser(spot, user);
     bookingPayload.user = fetchedUser;
 
