@@ -223,4 +223,8 @@ export class UsersService {
     // Save the updated user
     return await this.userRepo.save(user);
   }
+
+  async updateUser(user: User): Promise<User> {
+    return await this.userRepo.save(user);
+  }
 }
