@@ -7,6 +7,7 @@ export class TaskService {
   constructor(
     @InjectQueue('emailQueue') private emailQueue: Queue,
     @InjectQueue('firebaseQueue') private firebaseQueue: Queue,
+    @InjectQueue('userStreakQueue') private userStreakQueue: Queue,
   ) {}
 
   async sendMailTask(data: any) {
@@ -15,5 +16,9 @@ export class TaskService {
 
   async sendToFirebaseTask(data: any) {
     await this.firebaseQueue.add('sendToFirebase', data);
+  }
+
+  async updateUserStreakTask(data: any) {
+    await this.userStreakQueue.add('updateUserStreak', data);
   }
 }
