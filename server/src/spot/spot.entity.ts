@@ -53,9 +53,6 @@ export class Spot {
   @JoinColumn({ name: 'section_id' })
   section: Section;
 
-  @Column({ default: true })
-  isAvailableForBooking: boolean;
-
   @ApiProperty({
     description: 'Date when the spot was created',
     example: '2024-03-15',
