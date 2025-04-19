@@ -101,6 +101,10 @@ export class SpotService {
     }
   }
 
+  async saveSpot(spot: Spot): Promise<Spot> {
+    return await this.spotRepository.save(spot);
+  }
+
   async update(id: string, updateSpotDto: UpdateSpotDto): Promise<Spot> {
     try {
       const { sectionId, ...spotData } = updateSpotDto;
