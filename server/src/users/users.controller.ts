@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { GenerateUserInviteCodeDTO } from './dto/generate-invite-code.dto';
 import { AdminAuthGuard } from 'src/auth/permissions/jwt-admin-permission-authguard';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateUserProfileDTO } from './dto/update-user-profile.dto';
 
 @Controller('users')
 export class UsersController {
@@ -38,6 +39,34 @@ export class UsersController {
       data: {
         inviteCode,
       },
+      statusCode: 200,
+    };
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
+  async getUserProfile(@GetUser() user: any) {
+    const userProfile = await this.userService.getUserById(user.userId);
+    return {
+      message: 'User profile fetched successfully',
+      data: userProfile,
+      statusCode: 200,
+    };
+  }
+
+  @Patch('profile')
+  @UseGuards(AuthGuard('jwt'))
+  async updateUserProfile(
+    @GetUser() user: any,
+    @Body() updateProfileDto: UpdateUserProfileDTO,
+  ) {
+    const updatedProfile = await this.userService.updateUserProfile(
+      user.userId,
+      updateProfileDto,
+    );
+    return {
+      message: 'User profile updated successfully',
+      data: updatedProfile,
       statusCode: 200,
     };
   }
