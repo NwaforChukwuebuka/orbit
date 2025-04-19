@@ -12,6 +12,9 @@ import { LoginUserDTO } from './dto/login-user.dto';
 import { GetUser } from './get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { StaffAuthGuard } from './permissions/jwt-staff-permission-authguard';
+import { RequestPasswordResetDTO } from './dto/request-password-reset.dto';
+import { VerifyOtpDTO } from './dto/verify-otp.dto';
+import { ResetPasswordDTO } from './dto/reset-password.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -65,6 +68,34 @@ export class AuthController {
   test() {
     return {
       message: 'Test successful',
+      statusCode: 200,
+    };
+  }
+
+  @Post('password-reset/request')
+  async requestPasswordReset(@Body() dto: RequestPasswordResetDTO) {
+    await this.authService.requestPasswordReset(dto);
+    return {
+      message: 'Password reset OTP sent to your email',
+      statusCode: 200,
+    };
+  }
+
+  @Post('password-reset/verify-otp')
+  async verifyOTP(@Body() dto: VerifyOtpDTO) {
+    const result = await this.authService.verifyOTP(dto);
+    return {
+      message: 'OTP verified successfully',
+      data: result,
+      statusCode: 200,
+    };
+  }
+
+  @Post('password-reset/reset')
+  async resetPassword(@Body() dto: ResetPasswordDTO) {
+    await this.authService.resetPassword(dto);
+    return {
+      message: 'Password reset successful',
       statusCode: 200,
     };
   }
