@@ -2,7 +2,6 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 import serviceAccount from '../config/firebase-adminsdk.json';
 import { ConfigService } from '@nestjs/config';
-import { timestamp } from 'rxjs';
 
 @Injectable()
 export class FirebaseService implements OnModuleInit {
@@ -10,7 +9,7 @@ export class FirebaseService implements OnModuleInit {
   onModuleInit() {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-      databaseURL: this.configService.get<string>('FIREBASE_DATABASE_URL'),
+      databaseURL: 'https://hazel-airlock-377520-default-rtdb.firebaseio.com/',
     });
   }
 
@@ -18,9 +17,9 @@ export class FirebaseService implements OnModuleInit {
     return admin.database();
   }
 
-  async writeToDatabase(data: any) {
+  async writeToDatabase(data: any, bookingId: string) {
     const db = this.getDatabase();
-    const ref = db.ref('bookings/add');
+    const ref = db.ref(`bookings/${bookingId}`);
     await ref.set({
       ...data,
       timestamp: admin.database.ServerValue.TIMESTAMP,

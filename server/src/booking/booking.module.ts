@@ -5,9 +5,10 @@ import { UsersModule } from 'src/users/users.module';
 import { SpotModule } from 'src/spot/spot.module';
 import { BookingRepository } from './booking.repository';
 import { DataSource } from 'typeorm';
+import { FirebaseModule } from 'src/firebase/firebase.module';
 
 @Module({
-  imports: [UsersModule, SpotModule],
+  imports: [UsersModule, SpotModule, FirebaseModule],
   providers: [
     BookingService,
     {
