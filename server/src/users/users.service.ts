@@ -106,13 +106,14 @@ export class UsersService {
     };
 
     const user = this.userRepo.create(userData);
+
     // TODO: Send a welcome email and verification code via RabbitMQ/Redis
-    // const mailData = {
-    //   to: dto.email,
-    //   subject: 'Welcome to Orbit',
-    //   text: `Welcome to Orbit, ${dto.firstName} ${dto.lastName}! Your account has been created successfully. Please login to your account to get started.`
-    // }
-    // await this.taskService.sendMailTask(mailData);
+    const mailData = {
+      to: dto.email,
+      subject: 'Welcome to Orbit',
+      text: `Welcome to Orbit, ${dto.firstName} ${dto.lastName}! Your account has been created successfully. Please login to your account to get started.`,
+    };
+    await this.taskService.sendMailTask(mailData);
     return await this.userRepo.save(user);
   }
 

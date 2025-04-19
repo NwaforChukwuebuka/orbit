@@ -24,10 +24,7 @@ import { SectionModule } from './section/section.module';
       isGlobal: true,
     }),
     BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
+      redis: `.env.${process.env.REDIS_URL}`,
     }),
     UsersModule,
     VenueModule,
