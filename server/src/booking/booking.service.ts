@@ -6,6 +6,9 @@ import { BookingRepository } from './booking.repository';
 import { CreateBookingDTO } from './dto/create-booking.dto';
 import { UsersService } from 'src/users/users.service';
 import { SpotService } from 'src/spot/spot.service';
+import { FirebaseService } from 'src/firebase/firebase.service';
+import { Booking } from './booking.entity';
+import { TaskService } from 'src/task/task.service';
 
 @Injectable()
 export class BookingService {
@@ -14,6 +17,8 @@ export class BookingService {
     private bookingRepo: BookingRepository,
     private userService: UsersService,
     private spotService: SpotService,
+    private firebaseService: FirebaseService,
+    private taskService: TaskService,
   ) {}
 
   // create booking
@@ -37,7 +42,6 @@ export class BookingService {
       email: fetchedUser.email,
       firstName: fetchedUser.firstName,
       lastName: fetchedUser.lastName,
-      phoneNumber: fetchedUser.phoneNumber,
     };
     fetchedSpot.bookedUser = bookedUser;
     fetchedSpot.isAvailable = false;
@@ -52,7 +56,33 @@ export class BookingService {
     // TODO: Check booking settings for data before continuing to book
     // TODO: handle repeat bookings
     const booking = this.bookingRepo.create(bookingPayload);
-    return await this.bookingRepo.save(booking);
+    const data = await this.bookingRepo.save(booking);
+    // add to firebase database
+    const firebaseData = this.buildFirebaseData(data);
+    // send this to a queue
+    await this.taskService.sendToFirebaseTask(firebaseData);
+    return data;
+  }
+
+  buildFirebaseData(data: Booking) {
+    const firebaseData = {
+      id: data.id,
+      date: data.date,
+      startTime: data.startTime.toLocaleTimeString(),
+      endTime: data.endTime.toLocaleTimeString(),
+      spot: {
+        id: data.spot.id,
+        isAvailable: data.spot.isAvailable,
+        bookedUser: data.spot.bookedUser,
+      },
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        firstName: data.user.firstName,
+        lastName: data.user.lastName,
+      },
+    };
+    return firebaseData;
   }
 
   async getSpotAndUser(spot, user): Promise<any> {

@@ -17,6 +17,7 @@ import { BullModule } from '@nestjs/bull';
 import { TaskModule } from './task/task.module';
 import { SectionModule } from './section/section.module';
 import { BookingModule } from './booking/booking.module';
+import { FirebaseModule } from './firebase/firebase.module';
 @Module({
   imports: [
     TypeOrmModule,
@@ -43,6 +44,7 @@ import { BookingModule } from './booking/booking.module';
     TaskModule,
     SectionModule,
     BookingModule,
+    FirebaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

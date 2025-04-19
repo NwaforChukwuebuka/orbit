@@ -7,11 +7,9 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Version,
 } from '@nestjs/common';
 import { SectionService } from './section.service';
-import { Section } from './section.entity';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 import {
