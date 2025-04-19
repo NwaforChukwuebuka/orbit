@@ -52,6 +52,7 @@ export class BookingService {
     // TODO: Check booking settings for data before continuing to book
     // TODO: handle repeat bookings
     const booking = this.bookingRepo.create(bookingPayload);
+    // TODO: handler firebase publishing
     return await this.bookingRepo.save(booking);
   }
 
