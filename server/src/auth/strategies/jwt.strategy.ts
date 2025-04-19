@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const parsedUser = JSON.parse(user);
     return {
       email: parsedUser.email,
-      userId: parsedUser.userId,
+      userId: parsedUser.id,
       userTag: parsedUser.tag.name,
       venueId: parsedUser.venue.id,
     };

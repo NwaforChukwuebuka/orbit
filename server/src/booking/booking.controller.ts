@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { CreateBookingDTO } from './dto/create-booking.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/users/user.entity';
 
 @Controller('bookings')
 export class BookingController {
@@ -13,10 +14,9 @@ export class BookingController {
   @Post('')
   async createBooking(
     @Body() createBookingDto: CreateBookingDTO,
-    @GetUser() user: User,
+    @GetUser() user: any,
   ) {
-    console.log('user: ', user);
-    createBookingDto.user = user.id;
+    createBookingDto.user = user.userId;
     const data = await this.bookService.createBooking(createBookingDto);
     return {
       message: 'Booking created successfully',
