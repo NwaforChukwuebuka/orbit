@@ -58,8 +58,13 @@ export class WorkStationController {
     status: 400,
     description: 'Invalid work station data provided',
   })
-  create(@Body() createWorkStationDto: CreateWorkStationDto) {
-    return this.workStationService.create(createWorkStationDto);
+  async create(@Body() createWorkStationDto: CreateWorkStationDto) {
+    const data = await this.workStationService.create(createWorkStationDto);
+    return {
+      message: 'Workstation created successfully',
+      data,
+      statusCode: 201,
+    };
   }
 
   @Get()
@@ -103,8 +108,13 @@ export class WorkStationController {
       ],
     },
   })
-  findAll() {
-    return this.workStationService.findAll();
+  async findAll() {
+    const data = await this.workStationService.findAll();
+    return {
+      message: 'Workstations Fetched successfully',
+      data,
+      statusCode: 200,
+    };
   }
 
   @Get(':id')
@@ -134,8 +144,13 @@ export class WorkStationController {
     },
   })
   @ApiResponse({ status: 404, description: 'Work station not found' })
-  findOne(@Param('id') id: string) {
-    return this.workStationService.findOne(id);
+  async getWorkSpaceDetails(@Param('id') id: string) {
+    const data = await this.workStationService.findOneWithDetails(id);
+    return {
+      message: 'Details Fetched successfully',
+      data: data,
+      statusCode: 200,
+    };
   }
 
   @Patch(':id')
@@ -170,11 +185,16 @@ export class WorkStationController {
   })
   @ApiResponse({ status: 404, description: 'Work station not found' })
   @ApiResponse({ status: 400, description: 'Invalid update data provided' })
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateWorkStationDto: UpdateWorkStationDto,
   ) {
-    return this.workStationService.update(id, updateWorkStationDto);
+    const data = await this.workStationService.update(id, updateWorkStationDto);
+    return {
+      message: 'Work station updated successfully',
+      data: data,
+      statusCode: 200,
+    };
   }
 
   @Delete(':id')
@@ -195,7 +215,11 @@ export class WorkStationController {
     },
   })
   @ApiResponse({ status: 404, description: 'Work station not found' })
-  remove(@Param('id') id: string) {
-    return this.workStationService.remove(id);
+  async remove(@Param('id') id: string) {
+    await this.workStationService.remove(id);
+    return {
+      message: 'Work station deleted successfully',
+      statusCode: 204,
+    };
   }
 }

@@ -1,4 +1,27 @@
-import { Controller } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { BookingService } from './booking.service';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { CreateBookingDTO } from './dto/create-booking.dto';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller('booking')
-export class BookingController {}
+@Controller('bookings')
+export class BookingController {
+  constructor(private bookService: BookingService) {}
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('')
+  async createBooking(
+    @Body() createBookingDto: CreateBookingDTO,
+    @GetUser() user: any,
+  ) {
+    createBookingDto.user = user.userId;
+    const data = await this.bookService.createBooking(createBookingDto);
+    return {
+      message: 'Booking created successfully',
+      data,
+      statusCode: 201,
+    };
+  }
+}
