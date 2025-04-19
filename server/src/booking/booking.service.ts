@@ -31,9 +31,9 @@ export class BookingService {
       spot,
       bookingPayload.date,
     );
-    // if (isBooked) {
-    //   throw new HttpException('Spot Booked by another user', 400);
-    // }
+    if (isBooked) {
+      throw new HttpException('Spot Booked by another user', 400);
+    }
     const [fetchedSpot, fetchedUser] = await this.getSpotAndUser(spot, user);
     bookingPayload.user = fetchedUser;
 
@@ -56,9 +56,7 @@ export class BookingService {
     // TODO: Check booking settings for data before continuing to book
     // TODO: handle repeat bookings
     const booking = this.bookingRepo.create(bookingPayload);
-    // TODO: handler firebase publishing
     const data = await this.bookingRepo.save(booking);
-
     // add to firebase database
     const firebaseData = this.buildFirebaseData(data);
     // send this to a queue
