@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { HttpException, Injectable } from '@nestjs/common';
@@ -20,8 +21,6 @@ export class BookingService {
     // get user and spot from payload
     const { user, spot } = bookingPayload;
 
-    console.log('this is the payload: ', bookingPayload);
-
     // gotta check if spot is available
     const isBooked = await this.bookingRepo.isSpotBooked(
       spot,
@@ -33,7 +32,20 @@ export class BookingService {
     const [fetchedSpot, fetchedUser] = await this.getSpotAndUser(spot, user);
     bookingPayload.user = fetchedUser;
 
-    bookingPayload.spot = fetchedSpot;
+    const bookedUser = {
+      id: fetchedUser.id,
+      email: fetchedUser.email,
+      firstName: fetchedUser.firstName,
+      lastName: fetchedUser.lastName,
+      phoneNumber: fetchedUser.phoneNumber,
+    };
+    fetchedSpot.bookedUser = bookedUser;
+    fetchedSpot.isAvailable = false;
+
+    // save spot
+    const savedSpot = await this.spotService.saveSpot(fetchedSpot);
+
+    bookingPayload.spot = savedSpot;
     bookingPayload.startTime = new Date(bookingPayload.startTime);
     bookingPayload.endTime = new Date(bookingPayload.endTime);
 
