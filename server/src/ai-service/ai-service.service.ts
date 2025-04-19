@@ -52,7 +52,7 @@ export class AiServiceService {
     return client;
   }
 
-  private async sendRequest(message: string, userId: string) {
+  async sendRequest(message: string, userId: string) {
     const chatHistory = this.userChatHistoryData[userId] || [];
     if (chatHistory.length === 0) {
       this.userChatHistoryData[userId] = this.initialChatHistory;
@@ -65,12 +65,14 @@ export class AiServiceService {
       messages: chatHistoryWithUserMessage,
       max_tokens: 1000,
       temperature: 0.7,
+      model: this.model,
     };
     // update the userchatHistoryData with the new message
     this.userChatHistoryData[userId] = chatHistoryWithUserMessage;
 
     const response = await this.client.path('/chat/completions').post({ body });
     if (response.status !== '200') {
+      console.log('response', response);
       throw new Error(
         `Unexpected response: ${response.status} 'Unknown error'}`,
       );
@@ -78,5 +80,6 @@ export class AiServiceService {
     const result = (response.body as ChatCompletionsOutput).choices[0].message;
     console.log('result', result);
     this.userChatHistoryData[userId].push(result);
+    return result;
   }
 }
