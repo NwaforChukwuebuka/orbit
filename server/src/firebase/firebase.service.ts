@@ -9,7 +9,7 @@ export class FirebaseService implements OnModuleInit {
   onModuleInit() {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-      databaseURL: 'https://hazel-airlock-377520-default-rtdb.firebaseio.com/',
+      databaseURL: this.configService.get<string>('FIREBASE_DATABASE_URL'),
     });
   }
 
@@ -24,5 +24,11 @@ export class FirebaseService implements OnModuleInit {
       ...data,
       timestamp: admin.database.ServerValue.TIMESTAMP,
     });
+  }
+
+  async deleteFromDatabase(bookingId: string) {
+    const db = this.getDatabase();
+    const ref = db.ref(`bookings/${bookingId}`);
+    await ref.remove();
   }
 }
