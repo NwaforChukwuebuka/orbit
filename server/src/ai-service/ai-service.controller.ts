@@ -19,7 +19,7 @@ export class AiServiceController {
     const { message } = data;
     const userId: string = user.userId as string;
     const response = await this.aiServiceService.sendRequest(message, userId);
-    // TODO: check the response for if book request
+    // TODO: check the response for if book space request
     const jsonObject = JSON.parse(response.content as string);
     return {
       message: 'Response generated successfully',
