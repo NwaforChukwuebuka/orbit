@@ -8,6 +8,6 @@ import { Spot } from './spot.entity';
   imports: [TypeOrmModule.forFeature([Spot])],
   controllers: [SpotController],
   providers: [SpotService],
-  exports: [SpotService]
+  exports: [SpotService],
 })
 export class SpotModule {}

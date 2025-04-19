@@ -24,6 +24,10 @@ export class UserRepository extends Repository<User> {
     return this.find({ where: { isActive: true } });
   }
 
+  async findUserByID(userId: string) {
+    return this.findOne({ where: { id: userId } });
+  }
+
   async userWithEmailExists(email: string): Promise<boolean> {
     const user = await this.findOne({ where: { email } });
     return !!user;

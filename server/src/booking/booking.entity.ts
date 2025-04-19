@@ -1,30 +1,47 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
+import { Spot } from 'src/spot/spot.entity';
 
 @Entity('bookings')
 export class Booking {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  status: string;
+  @Column({ nullable: true })
+  title: string;
 
-  @Column()
-  reference: string;
-
-  @Column({ name: 'qr_code_url' })
+  @Column({ name: 'qr_code_url', nullable: true })
   qrCodeUrl: string;
 
-  @Column({ name: 'checked_in' })
+  @Column({ name: 'checked_in', default: false })
   checkedIn: boolean;
 
-  @Column({ name: 'is_expired' })
+  @Column({ name: 'is_expired', default: false })
   isExpired: boolean;
 
-  @Column({ name: 'created_at' })
+  @ManyToOne(() => Spot, (spot) => spot.bookings)
+  spot: Spot;
+
+  @Column()
+  date: Date;
+
+  @Column({ type: 'timestamp' })
+  startTime: Date;
+
+  @Column({ type: 'timestamp' })
+  endTime: Date;
+
+  @CreateDateColumn()
   createdAt: Date;
 
-  @Column({ name: 'updated_at' })
+  @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.bookings)

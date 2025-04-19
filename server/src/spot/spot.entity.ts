@@ -6,9 +6,11 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Section } from '../section/section.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Booking } from 'src/booking/booking.entity';
 
 export interface BookedUser {
   userId: string;
@@ -51,15 +53,15 @@ export class Spot {
   @JoinColumn({ name: 'section_id' })
   section: Section;
 
-  @Column({ default: true })
-  isAvailableForBooking: boolean;
-
   @ApiProperty({
     description: 'Date when the spot was created',
     example: '2024-03-15',
   })
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => Booking, (booking) => booking.spot)
+  bookings: Booking;
 
   @ApiProperty({
     description: 'Timestamp of the last update',

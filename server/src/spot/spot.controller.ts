@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Version,
+  Query,
 } from '@nestjs/common';
 import { SpotService } from './spot.service';
 import { CreateSpotDto } from './dto/create-spot.dto';
@@ -87,6 +88,18 @@ export class SpotController {
   })
   findAll() {
     return this.spotService.findAll();
+  }
+
+  @Get(':sectionId')
+  async getAllSpotsAvailable(
+    @Param('sectionId') sectionId: string,
+    @Query('date') date: string,
+  ) {
+    const parseDate = new Date(date);
+    if (isNaN(parseDate.getTime())) {
+      throw new Error('Invalid date format');
+    }
+    return this.spotService.getSpotsBySectionAndTime(sectionId, parseDate);
   }
 
   @Get(':id')

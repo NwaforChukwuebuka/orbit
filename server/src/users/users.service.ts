@@ -144,6 +144,10 @@ export class UsersService {
     return await this.userRepo.save(user);
   }
 
+  async getUserById(userId: string) {
+    return await this.userRepo.findUserByID(userId);
+  }
+
   private async ensureUserUniqueness(
     email: string,
     phone: string,
