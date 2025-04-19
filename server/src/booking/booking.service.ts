@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { SpotService } from 'src/spot/spot.service';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { Booking } from './booking.entity';
+import { TaskService } from 'src/task/task.service';
 
 @Injectable()
 export class BookingService {
@@ -17,6 +18,7 @@ export class BookingService {
     private userService: UsersService,
     private spotService: SpotService,
     private firebaseService: FirebaseService,
+    private taskService: TaskService,
   ) {}
 
   // create booking
@@ -56,11 +58,11 @@ export class BookingService {
     const booking = this.bookingRepo.create(bookingPayload);
     // TODO: handler firebase publishing
     const data = await this.bookingRepo.save(booking);
-    console.log('booking data: ', data);
+
     // add to firebase database
     const firebaseData = this.buildFirebaseData(data);
-    console.log('firebase data: ', firebaseData);
-    await this.firebaseService.writeToDatabase(firebaseData, firebaseData.id);
+    // send this to a queue
+    await this.taskService.sendToFirebaseTask(firebaseData);
     return data;
   }
 
