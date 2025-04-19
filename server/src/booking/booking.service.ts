@@ -31,9 +31,9 @@ export class BookingService {
       spot,
       bookingPayload.date,
     );
-    if (isBooked) {
-      throw new HttpException('Spot Booked by another user', 400);
-    }
+    // if (isBooked) {
+    //   throw new HttpException('Spot Booked by another user', 400);
+    // }
     const [fetchedSpot, fetchedUser] = await this.getSpotAndUser(spot, user);
     bookingPayload.user = fetchedUser;
 
@@ -61,6 +61,16 @@ export class BookingService {
     const firebaseData = this.buildFirebaseData(data);
     // send this to a queue
     await this.taskService.sendToFirebaseTask(firebaseData);
+    // send email to the user
+    const bookDate = new Date(data.date).toLocaleDateString();
+    const from = new Date(data.startTime).toLocaleTimeString();
+    const to = new Date(data.endTime).toLocaleTimeString();
+    const emailData = {
+      to: data.user.email,
+      subject: 'Booking Confirmation',
+      text: `Your booking has been confirmed for ${bookDate} from ${from} to ${to}`,
+    };
+    await this.taskService.sendMailTask(emailData);
     return data;
   }
 
