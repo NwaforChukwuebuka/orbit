@@ -12,7 +12,7 @@ export class AiBookingProcessor {
   async handleAiBookingJob(job: Job) {
     console.log('Received job:', job.data);
     const { data } = job;
-    console.log('Received data:', data);
+    console.log('Received data ai service booking job:', data);
     await this.aiService.aiAgentBookingCreation(data as AIAgentBookingRequest);
   }
 }
