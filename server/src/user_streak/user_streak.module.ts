@@ -8,6 +8,6 @@ import { UserStreak } from './user_streak.entity';
   imports: [TypeOrmModule.forFeature([UserStreak])],
   controllers: [UserStreakController],
   providers: [UserStreakService],
-  exports: [UserStreakService]
+  exports: [UserStreakService],
 })
 export class UserStreakModule {}

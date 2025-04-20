@@ -19,6 +19,7 @@ import { SectionModule } from './section/section.module';
 import { BookingModule } from './booking/booking.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { SwapModule } from './swap/swap.module';
+import { AiServiceModule } from './ai-service/ai-service.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { SwapModule } from './swap/swap.module';
     BookingModule,
     FirebaseModule,
     SwapModule,
+    AiServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

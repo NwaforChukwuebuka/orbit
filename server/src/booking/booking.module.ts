@@ -8,9 +8,16 @@ import { DataSource } from 'typeorm';
 
 import { TaskModule } from 'src/task/task.module';
 import { FirebaseModule } from 'src/firebase/firebase.module';
+import { UserStreakModule } from 'src/user_streak/user_streak.module';
 
 @Module({
-  imports: [UsersModule, SpotModule, TaskModule, FirebaseModule],
+  imports: [
+    UsersModule,
+    SpotModule,
+    TaskModule,
+    FirebaseModule,
+    UserStreakModule,
+  ],
   providers: [
     BookingService,
     {
