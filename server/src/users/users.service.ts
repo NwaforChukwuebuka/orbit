@@ -148,6 +148,10 @@ export class UsersService {
     return await this.userRepo.findUserByID(userId);
   }
 
+  async getAllUser() {
+    return await this.userRepo.find();
+  }
+
   private async ensureUserUniqueness(
     email: string,
     phone: string,

@@ -18,6 +18,7 @@ import { TaskModule } from './task/task.module';
 import { SectionModule } from './section/section.module';
 import { BookingModule } from './booking/booking.module';
 import { FirebaseModule } from './firebase/firebase.module';
+import { ActivityModule } from './activity/activity.module';
 @Module({
   imports: [
     TypeOrmModule,
@@ -42,6 +43,7 @@ import { FirebaseModule } from './firebase/firebase.module';
     SectionModule,
     BookingModule,
     FirebaseModule,
+    ActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

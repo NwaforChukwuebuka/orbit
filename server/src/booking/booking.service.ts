@@ -9,6 +9,7 @@ import { SpotService } from 'src/spot/spot.service';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { Booking } from './booking.entity';
 import { TaskService } from 'src/task/task.service';
+import moment from 'moment';
 
 @Injectable()
 export class BookingService {
@@ -100,5 +101,49 @@ export class BookingService {
       this.spotService.findOne(spot),
       this.userService.getUserById(user),
     ]);
+  }
+
+  // Get All Booking
+  async getAllBooking() {
+    return await this.bookingRepo.find();
+  }
+
+  // Get current day bookings
+  async getTodayBookings() {
+    const today = moment().format('YYYY-MM-DD');
+    const startOfDay = moment(today).startOf('day').toDate();
+    const bookings = await this.bookingRepo.todayBooking(startOfDay);
+
+    if (bookings.length === 0) {
+      return 'No available booking today';
+    }
+
+    return bookings;
+  }
+
+  // Get the highest booking day in a week
+  async getHighestBookingDay() {
+    const format = moment().format('YYYY-MM-DD');
+    const startOfWeek = moment(format).startOf('week').toDate();
+    const endOfWeek = moment(format).endOf('week').toDate();
+
+    const bookings = await this.bookingRepo.getRecordsWithinRange(
+      startOfWeek,
+      endOfWeek,
+    );
+
+    const bookingCounts = bookings.reduce((acc, booking) => {
+      const dateKey = moment(booking.date).format('YYYY-MM-DD');
+      acc[dateKey] = (acc[dateKey] || 0) + 1;
+      return acc;
+    }, {});
+
+    const highestBookingDate = Object.entries(bookingCounts).reduce(
+      (max, [date, count]: [string, number]) =>
+        count > max.count ? { date, count } : max,
+      { date: null, count: 0 },
+    );
+
+    return highestBookingDate;
   }
 }
