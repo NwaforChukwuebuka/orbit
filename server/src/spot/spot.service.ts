@@ -74,12 +74,33 @@ export class SpotService {
             date,
           }),
       )
+      .addSelect(
+        (subQuery) =>
+          subQuery
+            .select(
+              `CASE 
+                     WHEN COUNT(*) = SUM(CASE WHEN bookings.availableForSwap THEN 1 ELSE 0 END) 
+                     THEN true 
+                     ELSE false 
+                   END`,
+              'availableForSwap',
+            )
+            .from('bookings', 'bookings')
+            .where('bookings.spotId = spot.id'),
+        'spot_isAvailableForSwap',
+      )
       .getMany();
 
     return spots.map((spot) => ({
       ...spot,
-      isBooked: (spot as any).bookingsAtTime > 0,
+      isAvailableForSwap: spot['spot_isAvailableForSwap'] === 'true',
     }));
+  }
+
+  async getAllAvailableSpots(): Promise<Spot[]> {
+    return await this.spotRepository.find({
+      where: { isAvailable: true },
+    });
   }
 
   async findOne(id: string): Promise<Spot> {

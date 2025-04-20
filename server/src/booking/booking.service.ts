@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -10,6 +12,7 @@ import { FirebaseService } from 'src/firebase/firebase.service';
 import { Booking } from './booking.entity';
 import { TaskService } from 'src/task/task.service';
 import { UpdateBookingDTO } from './dto/update-booking.dto';
+import moment from 'moment';
 
 @Injectable()
 export class BookingService {
@@ -147,7 +150,11 @@ export class BookingService {
     return true;
   }
 
-  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingDTO, userId: string) {
+  async updateBooking(
+    bookingId: string,
+    updateBookingDto: UpdateBookingDTO,
+    userId: string,
+  ) {
     // Find the booking
     const booking = await this.bookingRepo.findOne({
       where: { id: bookingId },
@@ -166,7 +173,7 @@ export class BookingService {
     // Update the booking times
     const oldStartTime = new Date(booking.startTime);
     const oldEndTime = new Date(booking.endTime);
-    
+
     booking.startTime = new Date(updateBookingDto.startTime);
     booking.endTime = new Date(updateBookingDto.endTime);
 
@@ -183,7 +190,7 @@ export class BookingService {
     const oldTo = oldEndTime.toLocaleTimeString();
     const newFrom = booking.startTime.toLocaleTimeString();
     const newTo = booking.endTime.toLocaleTimeString();
-    
+
     const emailData = {
       to: booking.user.email,
       subject: 'Booking Updated',
@@ -197,15 +204,14 @@ export class BookingService {
   async getUserBookings(userId: string) {
     // Find all bookings for a specific user
     const bookings = await this.bookingRepo.find({
-      where: { 
+      where: {
         user: { id: userId },
-        isExpired: false
       },
       relations: ['spot', 'user'],
       order: {
         date: 'ASC',
-        startTime: 'ASC'
-      }
+        startTime: 'ASC',
+      },
     });
 
     return bookings;
@@ -215,7 +221,7 @@ export class BookingService {
     // Find the specific booking
     const booking = await this.bookingRepo.findOne({
       where: { id: bookingId },
-      relations: ['user', 'spot']
+      relations: ['user', 'spot'],
     });
 
     if (!booking) {
@@ -228,5 +234,49 @@ export class BookingService {
     }
 
     return booking;
+  }
+
+  // Get All Booking
+  async getAllBooking() {
+    return await this.bookingRepo.find();
+  }
+
+  // Get current day bookings
+  async getTodayBookings() {
+    const today = moment().format('YYYY-MM-DD');
+    const startOfDay = moment(today).startOf('day').toDate();
+    const bookings = await this.bookingRepo.todayBooking(startOfDay);
+
+    if (bookings.length === 0) {
+      return 'No available booking today';
+    }
+
+    return bookings;
+  }
+
+  // Get the highest booking day in a week
+  async getHighestBookingDay() {
+    const format = moment().format('YYYY-MM-DD');
+    const startOfWeek = moment(format).startOf('week').toDate();
+    const endOfWeek = moment(format).endOf('week').toDate();
+
+    const bookings = await this.bookingRepo.getRecordsWithinRange(
+      startOfWeek,
+      endOfWeek,
+    );
+
+    const bookingCounts = bookings.reduce((acc, booking) => {
+      const dateKey = moment(booking.date).format('YYYY-MM-DD');
+      acc[dateKey] = (acc[dateKey] || 0) + 1;
+      return acc;
+    }, {});
+
+    const highestBookingDate = Object.entries(bookingCounts).reduce(
+      (max, [date, count]: [string, number]) =>
+        count > max.count ? { date, count } : max,
+      { date: null, count: 0 },
+    );
+
+    return highestBookingDate;
   }
 }

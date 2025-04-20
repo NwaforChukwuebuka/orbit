@@ -5,8 +5,8 @@ export class MarkAvailableForSwapDTO {
   @IsUUID()
   @IsString()
   bookingId: string;
-  
+
   @IsNotEmpty()
   @IsBoolean()
   availableForSwap: boolean;
-} 
+}

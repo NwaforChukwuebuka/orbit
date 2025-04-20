@@ -33,7 +33,10 @@ export class SwapService {
     });
 
     if (!booking) {
-      throw new HttpException('Booking not found or does not belong to user', 404);
+      throw new HttpException(
+        'Booking not found or does not belong to user',
+        404,
+      );
     }
 
     // Check if booking is in the past
@@ -51,10 +54,12 @@ export class SwapService {
     }
 
     booking.availableForSwap = dto.availableForSwap;
-    
+
     // Set swapAvailableUntil to 15 minutes before booking starts
     const swapCutoffTime = new Date(booking.startTime);
-    swapCutoffTime.setMinutes(swapCutoffTime.getMinutes() - this.MINUTES_BEFORE_BOOKING_CUTOFF);
+    swapCutoffTime.setMinutes(
+      swapCutoffTime.getMinutes() - this.MINUTES_BEFORE_BOOKING_CUTOFF,
+    );
     booking.swapAvailableUntil = swapCutoffTime;
 
     await this.bookingRepo.save(booking);
@@ -67,7 +72,9 @@ export class SwapService {
       .createQueryBuilder('booking')
       .innerJoinAndSelect('booking.user', 'user')
       .innerJoinAndSelect('booking.spot', 'spot')
-      .where('booking.availableForSwap = :availableForSwap', { availableForSwap: true })
+      .where('booking.availableForSwap = :availableForSwap', {
+        availableForSwap: true,
+      })
       .andWhere('user.id != :userId', { userId })
       .andWhere('booking.swapAvailableUntil > :now', { now: new Date() });
 
@@ -79,7 +86,7 @@ export class SwapService {
     const availableBookings = await query.getMany();
 
     // Format the response
-    return availableBookings.map(booking => ({
+    return availableBookings.map((booking) => ({
       id: booking.id,
       date: booking.date,
       startTime: booking.startTime,
@@ -100,13 +107,18 @@ export class SwapService {
     userId: string,
   ): Promise<SwapRequest> {
     // Get the requestor's booking
+    // TODO: Please use Promise.all for fetching both bookings
+    // Please don't add relations to the fetch query for both  since you are just using for validations
     const requestorBooking = await this.bookingRepo.findOne({
       where: { id: dto.requestorBookingId, user: { id: userId } },
       relations: ['user', 'spot'],
     });
 
     if (!requestorBooking) {
-      throw new HttpException('Requestor booking not found or does not belong to user', 404);
+      throw new HttpException(
+        'Requestor booking not found or does not belong to user',
+        404,
+      );
     }
 
     // Get the requested booking
@@ -116,12 +128,21 @@ export class SwapService {
     });
 
     if (!requestedBooking) {
-      throw new HttpException('Requested booking not found or not available for swap', 404);
+      throw new HttpException(
+        'Requested booking not found or not available for swap',
+        404,
+      );
     }
 
     // Verify that both bookings are for the same date
-    if (requestorBooking.date.toDateString() !== requestedBooking.date.toDateString()) {
-      throw new HttpException('Swap requests are only allowed for the same date', 400);
+    if (
+      requestorBooking.date.toDateString() !==
+      requestedBooking.date.toDateString()
+    ) {
+      throw new HttpException(
+        'Swap requests are only allowed for the same date',
+        400,
+      );
     }
 
     // Check if the bookings are too close to start time
@@ -142,27 +163,41 @@ export class SwapService {
       where: { user: { id: userId } },
     });
 
-    const weeklySwapCount = userBookings.reduce((count, booking) => count + booking.swapCount, 0);
+    const weeklySwapCount = userBookings.reduce(
+      (count, booking) => count + booking.swapCount,
+      0,
+    );
 
     if (weeklySwapCount >= this.MAX_SWAPS_PER_USER) {
-      throw new HttpException(`Maximum of ${this.MAX_SWAPS_PER_USER} swaps allowed per week`, 400);
+      throw new HttpException(
+        `Maximum of ${this.MAX_SWAPS_PER_USER} swaps allowed per week`,
+        400,
+      );
     }
 
     // Check if there are existing active swap requests for either booking
-    const existingSwapRequest = await this.swapRequestRepo.findActiveSwapRequestForBooking(
-      requestorBooking.id,
-    );
+    const existingSwapRequest =
+      await this.swapRequestRepo.findActiveSwapRequestForBooking(
+        requestorBooking.id,
+      );
 
     if (existingSwapRequest) {
-      throw new HttpException('There is already an active swap request for your booking', 400);
+      throw new HttpException(
+        'There is already an active swap request for your booking',
+        400,
+      );
     }
 
-    const existingRequestedSwapRequest = await this.swapRequestRepo.findActiveSwapRequestForBooking(
-      requestedBooking.id,
-    );
+    const existingRequestedSwapRequest =
+      await this.swapRequestRepo.findActiveSwapRequestForBooking(
+        requestedBooking.id,
+      );
 
     if (existingRequestedSwapRequest) {
-      throw new HttpException('There is already an active swap request for the requested booking', 400);
+      throw new HttpException(
+        'There is already an active swap request for the requested booking',
+        400,
+      );
     }
 
     // Create swap request
@@ -193,7 +228,9 @@ export class SwapService {
     dto: RespondToSwapRequestDTO,
     userId: string,
   ): Promise<SwapRequest> {
-    const swapRequest = await this.swapRequestRepo.findSwapRequestById(dto.swapRequestId);
+    const swapRequest = await this.swapRequestRepo.findSwapRequestById(
+      dto.swapRequestId,
+    );
 
     if (!swapRequest) {
       throw new HttpException('Swap request not found', 404);
@@ -201,12 +238,18 @@ export class SwapService {
 
     // Check if requestedUser exists
     if (!swapRequest.requestedUser) {
-      throw new HttpException('Requested user not found for this swap request', 404);
+      throw new HttpException(
+        'Requested user not found for this swap request',
+        404,
+      );
     }
 
     // Check if user is the requested user
     if (swapRequest.requestedUser.id !== userId) {
-      throw new HttpException('You are not authorized to respond to this swap request', 403);
+      throw new HttpException(
+        'You are not authorized to respond to this swap request',
+        403,
+      );
     }
 
     // Check if the request is still pending
@@ -230,7 +273,7 @@ export class SwapService {
     // Update swap request status
     swapRequest.status = dto.status;
     swapRequest.resolvedAt = new Date();
-    
+
     if (dto.message) {
       swapRequest.message = dto.message;
     }
@@ -240,11 +283,12 @@ export class SwapService {
     // If accepted, perform the swap
     if (dto.status === SwapRequestStatus.ACCEPTED) {
       // Reload both bookings with full relations before executing the swap
+      // TODO: likewise here too please use Promise.all, helps with performance and concurrent async calls
       const requestorBooking = await this.bookingRepo.findOne({
         where: { id: swapRequest.requestorBooking.id },
         relations: ['user', 'spot'],
       });
-      
+
       const requestedBooking = await this.bookingRepo.findOne({
         where: { id: swapRequest.requestedBooking.id },
         relations: ['user', 'spot'],
@@ -255,22 +299,33 @@ export class SwapService {
       }
 
       // Ensure bookings have spots and users
-      if (!requestorBooking.spot || !requestedBooking.spot || !requestorBooking.user || !requestedBooking.user) {
-        throw new HttpException('Bookings are missing required spot or user information', 400);
+      if (
+        !requestorBooking.spot ||
+        !requestedBooking.spot ||
+        !requestorBooking.user ||
+        !requestedBooking.user
+      ) {
+        throw new HttpException(
+          'Bookings are missing required spot or user information',
+          400,
+        );
       }
 
       // Update the bookings in the swap request
       updatedSwapRequest.requestorBooking = requestorBooking;
       updatedSwapRequest.requestedBooking = requestedBooking;
-      
+
       await this.executeSwap(updatedSwapRequest);
     }
 
     // Send notification to the requestor
-    const statusText = dto.status === SwapRequestStatus.ACCEPTED ? 'accepted' : 
-                       dto.status === SwapRequestStatus.REJECTED ? 'rejected' : 
-                       'cancelled';
-    
+    const statusText =
+      dto.status === SwapRequestStatus.ACCEPTED
+        ? 'accepted'
+        : dto.status === SwapRequestStatus.REJECTED
+          ? 'rejected'
+          : 'cancelled';
+
     const emailData = {
       to: swapRequest.requestorUser.email,
       subject: `Swap Request ${statusText.charAt(0).toUpperCase() + statusText.slice(1)}`,
@@ -295,7 +350,10 @@ export class SwapService {
 
     // Check if both bookings have spots assigned
     if (!requestorBooking?.spot || !requestedBooking?.spot) {
-      throw new HttpException('Cannot execute swap: one or both bookings are missing spot information', 400);
+      throw new HttpException(
+        'Cannot execute swap: one or both bookings are missing spot information',
+        400,
+      );
     }
 
     // Swap the spots
@@ -304,17 +362,30 @@ export class SwapService {
     requestedBooking.spot = tempSpot;
 
     // Update the spots' booked users
-    const requestorSpot = await this.spotService.findOne(requestorBooking.spot.id);
-    const requestedSpot = await this.spotService.findOne(requestedBooking.spot.id);
+    // TODO: Please use Promise.all for fetching both spots
+    const requestorSpot = await this.spotService.findOne(
+      requestorBooking.spot.id,
+    );
+    const requestedSpot = await this.spotService.findOne(
+      requestedBooking.spot.id,
+    );
+
+    // TODO: You forgot to swap the user in the booking entity
 
     // Check if spots were found
     if (!requestorSpot || !requestedSpot) {
-      throw new HttpException('Cannot execute swap: one or both spots not found', 404);
+      throw new HttpException(
+        'Cannot execute swap: one or both spots not found',
+        404,
+      );
     }
 
     // Check if both bookings have users assigned
     if (!requestedBooking?.user || !requestorBooking?.user) {
-      throw new HttpException('Cannot execute swap: one or both bookings are missing user information', 400);
+      throw new HttpException(
+        'Cannot execute swap: one or both bookings are missing user information',
+        400,
+      );
     }
 
     const requestorUserInfo: BookedUser = {
@@ -340,6 +411,8 @@ export class SwapService {
 
     // Save the updated bookings
     await this.bookingRepo.save([requestorBooking, requestedBooking]);
+    // TODO: Lets update the firebase database so the client gets the updated data too.
+    // TODO: Can use Promise.all for saving both spots
     await this.spotService.saveSpot(requestorSpot);
     await this.spotService.saveSpot(requestedSpot);
   }
@@ -350,4 +423,4 @@ export class SwapService {
     const diffMs = bookingDate.getTime() - now.getTime();
     return Math.floor(diffMs / 60000); // Convert milliseconds to minutes
   }
-} 
+}

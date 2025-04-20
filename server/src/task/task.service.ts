@@ -8,6 +8,7 @@ export class TaskService {
     @InjectQueue('emailQueue') private emailQueue: Queue,
     @InjectQueue('firebaseQueue') private firebaseQueue: Queue,
     @InjectQueue('userStreakQueue') private userStreakQueue: Queue,
+    @InjectQueue('aiBookingQueue') private aiBookingQueue: Queue,
   ) {}
 
   async sendMailTask(data: any) {
@@ -20,5 +21,9 @@ export class TaskService {
 
   async updateUserStreakTask(data: any) {
     await this.userStreakQueue.add('updateUserStreak', data);
+  }
+
+  async aiBookingTask(data: any) {
+    await this.aiBookingQueue.add('aiBooking', data);
   }
 }

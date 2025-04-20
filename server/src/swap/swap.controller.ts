@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { SwapService } from './swap.service';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -27,11 +37,11 @@ export class SwapController {
 
   @Get('available')
   @UseGuards(AuthGuard('jwt'))
-  async getAvailableSwaps(
-    @GetUser() user: any,
-    @Query('date') date?: string,
-  ) {
-    const availableSwaps = await this.swapService.getAvailableSwaps(user.userId, date);
+  async getAvailableSwaps(@GetUser() user: any, @Query('date') date?: string) {
+    const availableSwaps = await this.swapService.getAvailableSwaps(
+      user.userId,
+      date,
+    );
     return {
       message: 'Available swaps retrieved successfully',
       data: availableSwaps,
@@ -45,7 +55,10 @@ export class SwapController {
     @Body() dto: CreateSwapRequestDTO,
     @GetUser() user: any,
   ) {
-    const swapRequest = await this.swapService.createSwapRequest(dto, user.userId);
+    const swapRequest = await this.swapService.createSwapRequest(
+      dto,
+      user.userId,
+    );
     return {
       message: 'Swap request created successfully',
       data: swapRequest,
@@ -59,7 +72,10 @@ export class SwapController {
     @Body() dto: RespondToSwapRequestDTO,
     @GetUser() user: any,
   ) {
-    const swapRequest = await this.swapService.respondToSwapRequest(dto, user.userId);
+    const swapRequest = await this.swapService.respondToSwapRequest(
+      dto,
+      user.userId,
+    );
     return {
       message: 'Swap request response recorded successfully',
       data: swapRequest,
@@ -81,11 +97,13 @@ export class SwapController {
   @Get('pending')
   @UseGuards(AuthGuard('jwt'))
   async getPendingSwapRequests(@GetUser() user: any) {
-    const pendingRequests = await this.swapService.getPendingSwapRequests(user.userId);
+    const pendingRequests = await this.swapService.getPendingSwapRequests(
+      user.userId,
+    );
     return {
       message: 'Pending swap requests retrieved successfully',
       data: pendingRequests,
       statusCode: 200,
     };
   }
-} 
+}

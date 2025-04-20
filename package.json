@@ -2,6 +2,7 @@
     "scripts": {
         "client": "npm run dev --prefix client",
         "server": "npm run start:dev --prefix server",
+        "debug": "npm run start:debug --prefix server",
         "test:server": "npm test --prefix server",
         "test:client": "npm test --prefix client",
         "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
@@ -11,5 +12,8 @@
     },
     "devDependencies": {
         "concurrently": "^9.1.2"
+    },
+    "dependencies": {
+        "@nestjs/config": "^4.0.2"
     }
 }
