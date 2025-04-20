@@ -147,7 +147,11 @@ export class BookingService {
     return true;
   }
 
-  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingDTO, userId: string) {
+  async updateBooking(
+    bookingId: string,
+    updateBookingDto: UpdateBookingDTO,
+    userId: string,
+  ) {
     // Find the booking
     const booking = await this.bookingRepo.findOne({
       where: { id: bookingId },
@@ -166,7 +170,7 @@ export class BookingService {
     // Update the booking times
     const oldStartTime = new Date(booking.startTime);
     const oldEndTime = new Date(booking.endTime);
-    
+
     booking.startTime = new Date(updateBookingDto.startTime);
     booking.endTime = new Date(updateBookingDto.endTime);
 
@@ -183,7 +187,7 @@ export class BookingService {
     const oldTo = oldEndTime.toLocaleTimeString();
     const newFrom = booking.startTime.toLocaleTimeString();
     const newTo = booking.endTime.toLocaleTimeString();
-    
+
     const emailData = {
       to: booking.user.email,
       subject: 'Booking Updated',
@@ -197,15 +201,14 @@ export class BookingService {
   async getUserBookings(userId: string) {
     // Find all bookings for a specific user
     const bookings = await this.bookingRepo.find({
-      where: { 
+      where: {
         user: { id: userId },
-        isExpired: false
       },
       relations: ['spot', 'user'],
       order: {
         date: 'ASC',
-        startTime: 'ASC'
-      }
+        startTime: 'ASC',
+      },
     });
 
     return bookings;
@@ -215,7 +218,7 @@ export class BookingService {
     // Find the specific booking
     const booking = await this.bookingRepo.findOne({
       where: { id: bookingId },
-      relations: ['user', 'spot']
+      relations: ['user', 'spot'],
     });
 
     if (!booking) {
