@@ -46,4 +46,13 @@ export class Booking {
 
   @ManyToOne(() => User, (user) => user.bookings)
   user: User;
+
+  @Column({ name: 'available_for_swap', default: false })
+  availableForSwap: boolean;
+
+  @Column({ name: 'swap_available_until', nullable: true, type: 'timestamp' })
+  swapAvailableUntil: Date;
+
+  @Column({ name: 'swap_count', default: 0 })
+  swapCount: number;
 }

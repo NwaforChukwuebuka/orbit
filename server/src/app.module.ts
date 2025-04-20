@@ -18,6 +18,9 @@ import { TaskModule } from './task/task.module';
 import { SectionModule } from './section/section.module';
 import { BookingModule } from './booking/booking.module';
 import { FirebaseModule } from './firebase/firebase.module';
+import { SwapModule } from './swap/swap.module';
+import { AiServiceModule } from './ai-service/ai-service.module';
+
 import { ActivityModule } from './activity/activity.module';
 @Module({
   imports: [
@@ -43,7 +46,6 @@ import { ActivityModule } from './activity/activity.module';
     SectionModule,
     BookingModule,
     FirebaseModule,
-    ActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

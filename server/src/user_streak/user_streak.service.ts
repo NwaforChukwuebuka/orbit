@@ -1,7 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserStreak } from './user_streak.entity';
+import { User } from 'src/users/user.entity';
+import { isSameDay, isYesterday } from 'date-fns';
 
 @Injectable()
 export class UserStreakService {
@@ -10,98 +12,35 @@ export class UserStreakService {
     private userStreakRepository: Repository<UserStreak>,
   ) {}
 
-  async findAll(): Promise<UserStreak[]> {
-    return this.userStreakRepository.find({
-      relations: ['user'],
+  async updateUserStreak(user: User) {
+    let streak = await this.userStreakRepository.findOne({
+      where: { user: { id: user.id } },
     });
-  }
+    const today = new Date();
 
-  async findOne(id: string): Promise<UserStreak> {
-    const userStreak = await this.userStreakRepository.findOne({
-      where: { id },
-      relations: ['user'],
-    });
-    
-    if (!userStreak) {
-      throw new NotFoundException(`User streak with ID ${id} not found`);
+    if (!streak) {
+      streak = this.userStreakRepository.create({
+        user,
+        lastActivityDate: today,
+        streakCount: 1,
+        highestStreak: 1,
+      });
+    } else {
+      if (isSameDay(streak.lastActivityDate, today)) {
+        return streak; // No update needed if the last activity date is today
+      }
+      if (isYesterday(streak.lastActivityDate)) {
+        streak.streakCount += 1; // Increment streak count if yesterday
+      } else {
+        // reset streak count if not consecutive
+        streak.highestStreak = Math.max(
+          streak.highestStreak,
+          streak.streakCount,
+        );
+        streak.streakCount = 1; // Reset streak count if not consecutive
+      }
+      streak.lastActivityDate = today;
     }
-    
-    return userStreak;
-  }
-
-  async findByUser(userId: string): Promise<UserStreak> {
-    const userStreak = await this.userStreakRepository.findOne({
-      where: { user: { id: userId } },
-      relations: ['user'],
-    });
-    
-    if (!userStreak) {
-      throw new NotFoundException(`User streak for user with ID ${userId} not found`);
-    }
-    
-    return userStreak;
-  }
-
-  async create(createUserStreakDto: any): Promise<UserStreak> {
-    const userStreak = this.userStreakRepository.create({
-      user: { id: createUserStreakDto.user },
-      lastActivityDate: createUserStreakDto.lastActivityDate,
-      streakCount: createUserStreakDto.streakCount,
-      highestStreak: createUserStreakDto.highestStreak,
-    });
-    
-    return this.userStreakRepository.save(userStreak);
-  }
-
-  async update(id: string, updateUserStreakDto: any): Promise<UserStreak> {
-    const userStreak = await this.findOne(id);
-    
-    if (updateUserStreakDto.user) {
-      userStreak.user = { id: updateUserStreakDto.user } as any;
-    }
-    
-    if (updateUserStreakDto.lastActivityDate) {
-      userStreak.lastActivityDate = updateUserStreakDto.lastActivityDate;
-    }
-    
-    if (updateUserStreakDto.streakCount !== undefined) {
-      userStreak.streakCount = updateUserStreakDto.streakCount;
-    }
-    
-    if (updateUserStreakDto.highestStreak !== undefined) {
-      userStreak.highestStreak = updateUserStreakDto.highestStreak;
-    }
-    
-    return this.userStreakRepository.save(userStreak);
-  }
-
-  async remove(id: string): Promise<void> {
-    const result = await this.userStreakRepository.delete(id);
-    
-    if (result.affected === 0) {
-      throw new NotFoundException(`User streak with ID ${id} not found`);
-    }
-  }
-
-  async incrementStreak(userId: string): Promise<UserStreak> {
-    const userStreak = await this.findByUser(userId);
-    
-    userStreak.streakCount += 1;
-    userStreak.lastActivityDate = new Date();
-    
-    if (userStreak.streakCount > userStreak.highestStreak) {
-      userStreak.highestStreak = userStreak.streakCount;
-    }
-    
-    return this.userStreakRepository.save(userStreak);
-  }
-
-  async resetStreak(userId: string): Promise<UserStreak> {
-    const userStreak = await this.findByUser(userId);
-    
-    userStreak.streakCount = 0;
-    userStreak.lastActivityDate = new Date();
-    
-    return this.userStreakRepository.save(userStreak);
+    return await this.userStreakRepository.save(streak);
   }
 }
