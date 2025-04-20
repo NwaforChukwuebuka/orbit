@@ -17,6 +17,7 @@ import { GenerateUserInviteCodeDTO } from './dto/generate-invite-code.dto';
 import {v4 as uuidv4} from 'uuid';
 import { RedisService } from 'src/common/utils/redis.service';
 import { TaskService } from 'src/task/task.service';
+import { UpdateUserProfileDTO } from './dto/update-user-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -181,4 +182,49 @@ export class UsersService {
     return await bcrypt.hash(password, salt);
   }
   
+  async updateUserProfile(userId: string, updateProfileDto: UpdateUserProfileDTO): Promise<User> {
+    const user = await this.userRepo.findUserByID(userId);
+    
+    if (!user) {
+      throw new HttpException('User not found', 404);
+    }
+
+    // Update basic profile information
+    if (updateProfileDto.firstName) {
+      user.firstName = updateProfileDto.firstName;
+    }
+    
+    if (updateProfileDto.lastName) {
+      user.lastName = updateProfileDto.lastName;
+    }
+    
+    if (updateProfileDto.telephone) {
+      // Check if the new phone number is already used by another user
+      const phoneExists = await this.userRepo.userWithPhoneExists(updateProfileDto.telephone);
+      if (phoneExists && user.telephone !== updateProfileDto.telephone) {
+        throw new HttpException('Phone number already in use', 409);
+      }
+      
+      user.telephone = updateProfileDto.telephone;
+    }
+    
+    // Update password if provided
+    if (updateProfileDto.oldPassword && updateProfileDto.newPassword) {
+      // Verify old password
+      const isPasswordValid = await bcrypt.compare(updateProfileDto.oldPassword, user.password);
+      if (!isPasswordValid) {
+        throw new HttpException('Current password is incorrect', 400);
+      }
+      
+      // Hash and set the new password
+      user.password = await this.hashPassword(updateProfileDto.newPassword);
+    }
+    
+    // Save the updated user
+    return await this.userRepo.save(user);
+  }
+
+  async updateUser(user: User): Promise<User> {
+    return await this.userRepo.save(user);
+  }
 }

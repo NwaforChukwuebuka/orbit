@@ -27,6 +27,6 @@ import { UserStreakModule } from 'src/user_streak/user_streak.module';
     },
   ],
   controllers: [BookingController],
-  exports: [BookingService],
+  exports: [BookingService, BookingRepository],
 })
 export class BookingModule {}

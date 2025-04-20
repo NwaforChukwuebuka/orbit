@@ -18,7 +18,9 @@ import { TaskModule } from './task/task.module';
 import { SectionModule } from './section/section.module';
 import { BookingModule } from './booking/booking.module';
 import { FirebaseModule } from './firebase/firebase.module';
+import { SwapModule } from './swap/swap.module';
 import { AiServiceModule } from './ai-service/ai-service.module';
+
 @Module({
   imports: [
     TypeOrmModule,
@@ -46,6 +48,7 @@ import { AiServiceModule } from './ai-service/ai-service.module';
     SectionModule,
     BookingModule,
     FirebaseModule,
+    SwapModule,
     AiServiceModule,
   ],
   controllers: [AppController],

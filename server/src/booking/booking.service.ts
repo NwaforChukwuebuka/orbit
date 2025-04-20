@@ -9,6 +9,7 @@ import { SpotService } from 'src/spot/spot.service';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { Booking } from './booking.entity';
 import { TaskService } from 'src/task/task.service';
+import { UpdateBookingDTO } from './dto/update-booking.dto';
 
 @Injectable()
 export class BookingService {
@@ -102,5 +103,130 @@ export class BookingService {
       this.spotService.findOne(spot),
       this.userService.getUserById(user),
     ]);
+  }
+
+  async cancelBooking(bookingId: string, userId: string) {
+    // Find the booking
+    const booking = await this.bookingRepo.findOne({
+      where: { id: bookingId },
+      relations: ['user', 'spot'],
+    });
+
+    if (!booking) {
+      throw new HttpException('Booking not found', 404);
+    }
+
+    // Verify that the booking belongs to the user
+    if (booking.user.id !== userId) {
+      throw new HttpException('Unauthorized access to booking', 403);
+    }
+
+    // Update the spot status
+    const spot = booking.spot;
+    spot.isAvailable = true;
+    spot.bookedUser = null;
+    await this.spotService.saveSpot(spot);
+
+    // Delete the booking
+    await this.bookingRepo.remove(booking);
+
+    // Remove from Firebase
+    await this.firebaseService.deleteFromDatabase(bookingId);
+
+    // Send cancellation email to the user
+    const bookDate = new Date(booking.date).toLocaleDateString();
+    const from = new Date(booking.startTime).toLocaleTimeString();
+    const to = new Date(booking.endTime).toLocaleTimeString();
+    const emailData = {
+      to: booking.user.email,
+      subject: 'Booking Cancellation',
+      text: `Your booking for ${bookDate} from ${from} to ${to} has been cancelled.`,
+    };
+    await this.taskService.sendMailTask(emailData);
+
+    return true;
+  }
+
+  async updateBooking(bookingId: string, updateBookingDto: UpdateBookingDTO, userId: string) {
+    // Find the booking
+    const booking = await this.bookingRepo.findOne({
+      where: { id: bookingId },
+      relations: ['user', 'spot'],
+    });
+
+    if (!booking) {
+      throw new HttpException('Booking not found', 404);
+    }
+
+    // Verify that the booking belongs to the user
+    if (booking.user.id !== userId) {
+      throw new HttpException('Unauthorized access to booking', 403);
+    }
+
+    // Update the booking times
+    const oldStartTime = new Date(booking.startTime);
+    const oldEndTime = new Date(booking.endTime);
+    
+    booking.startTime = new Date(updateBookingDto.startTime);
+    booking.endTime = new Date(updateBookingDto.endTime);
+
+    // Save the updated booking
+    const updatedBooking = await this.bookingRepo.save(booking);
+
+    // Update in Firebase
+    const firebaseData = this.buildFirebaseData(updatedBooking);
+    await this.taskService.sendToFirebaseTask(firebaseData);
+
+    // Send update notification email to the user
+    const bookDate = new Date(booking.date).toLocaleDateString();
+    const oldFrom = oldStartTime.toLocaleTimeString();
+    const oldTo = oldEndTime.toLocaleTimeString();
+    const newFrom = booking.startTime.toLocaleTimeString();
+    const newTo = booking.endTime.toLocaleTimeString();
+    
+    const emailData = {
+      to: booking.user.email,
+      subject: 'Booking Updated',
+      text: `Your booking for ${bookDate} has been updated.\n\nPrevious time: ${oldFrom} to ${oldTo}\nNew time: ${newFrom} to ${newTo}`,
+    };
+    await this.taskService.sendMailTask(emailData);
+
+    return updatedBooking;
+  }
+
+  async getUserBookings(userId: string) {
+    // Find all bookings for a specific user
+    const bookings = await this.bookingRepo.find({
+      where: { 
+        user: { id: userId },
+        isExpired: false
+      },
+      relations: ['spot', 'user'],
+      order: {
+        date: 'ASC',
+        startTime: 'ASC'
+      }
+    });
+
+    return bookings;
+  }
+
+  async getBookingById(bookingId: string, userId: string) {
+    // Find the specific booking
+    const booking = await this.bookingRepo.findOne({
+      where: { id: bookingId },
+      relations: ['user', 'spot']
+    });
+
+    if (!booking) {
+      throw new HttpException('Booking not found', 404);
+    }
+
+    // Verify that the booking belongs to the user
+    if (booking.user.id !== userId) {
+      throw new HttpException('Unauthorized access to booking', 403);
+    }
+
+    return booking;
   }
 }
