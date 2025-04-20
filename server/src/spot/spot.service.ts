@@ -74,11 +74,26 @@ export class SpotService {
             date,
           }),
       )
+      .addSelect(
+        (subQuery) =>
+          subQuery
+            .select(
+              `CASE 
+                     WHEN COUNT(*) = SUM(CASE WHEN bookings.availableForSwap THEN 1 ELSE 0 END) 
+                     THEN true 
+                     ELSE false 
+                   END`,
+              'isAvailable',
+            )
+            .from('bookings', 'bookings')
+            .where('bookings.spotId = spot.id'),
+        'spot_isAvailableForSwap',
+      )
       .getMany();
 
     return spots.map((spot) => ({
       ...spot,
-      isBooked: (spot as any).bookingsAtTime > 0,
+      isAvailableForSwap: spot['spot_isAvailable'] === 'true',
     }));
   }
 
