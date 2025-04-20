@@ -23,6 +23,6 @@ import { TaskModule } from 'src/task/task.module';
     redisClientFactory,
   ],
   controllers: [UsersController],
-  exports: [RedisService, redisClientFactory, UsersService],
+  exports: [RedisService, redisClientFactory, UsersService, UserRepository],
 })
 export class UsersModule {}

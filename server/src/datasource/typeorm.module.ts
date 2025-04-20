@@ -12,6 +12,7 @@ import { WorkStation } from 'src/work_station/work_station.entity';
 import { Spot } from 'src/spot/spot.entity';
 import { UserStreak } from 'src/user_streak/user_streak.entity';
 import { BookingSettings } from 'src/booking_settings/booking_settings.entity';
+import { SwapRequest } from 'src/swap/swap-request.entity';
 
 @Global()
 @Module({
@@ -46,6 +47,7 @@ import { BookingSettings } from 'src/booking_settings/booking_settings.entity';
               UserStreak,
               HoursOfAvailability,
               BookingSettings,
+              SwapRequest,
             ],
             synchronize: true,
           });

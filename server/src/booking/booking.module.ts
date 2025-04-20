@@ -20,6 +20,6 @@ import { FirebaseModule } from 'src/firebase/firebase.module';
     },
   ],
   controllers: [BookingController],
-  exports: [BookingService],
+  exports: [BookingService, BookingRepository],
 })
 export class BookingModule {}
