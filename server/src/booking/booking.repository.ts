@@ -21,4 +21,20 @@ export class BookingRepository extends Repository<Booking> {
 
     return bookings.length > 0;
   }
+  async todayBooking(date: Date): Promise<any> {
+    const bookings = await this.createQueryBuilder('bookings')
+      .where('bookings.date = :date', { date })
+      .getMany();
+
+    return bookings;
+  }
+
+  async getRecordsWithinRange(startWeek: Date, endWeek: Date): Promise<any> {
+    const bookings = await this.createQueryBuilder('bookings')
+      .where('bookings.date >= :startWeek', { startWeek })
+      .andWhere('bookings.date <= :endWeek', { endWeek })
+      .getMany();
+
+    return bookings;
+  }
 }
