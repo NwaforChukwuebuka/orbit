@@ -1,0 +1,28 @@
+.streakBox {
+  background-color: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  flex: 1;
+  min-width: 280px;
+  text-align: center;
+}
+
+.boxTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.streakBadge {
+  font-size: 20px;
+  font-weight: 700;
+  color: #10b981;
+  margin-bottom: 8px;
+}
+
+.subText {
+  font-size: 14px;
+  color: #6b7280;
+}

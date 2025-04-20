@@ -1,0 +1,49 @@
+.sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  padding: 24px;
+  border-right: 1px solid #e5e7eb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: #4b5563;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.link:hover {
+  background-color: #f3f4f6;
+}
+
+.active {
+  background-color: #e0e7ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.icon {
+  font-size: 18px;
+}
