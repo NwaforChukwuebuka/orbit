@@ -21,6 +21,7 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { SwapModule } from './swap/swap.module';
 import { AiServiceModule } from './ai-service/ai-service.module';
 
+import { ActivityModule } from './activity/activity.module';
 @Module({
   imports: [
     TypeOrmModule,
@@ -29,10 +30,7 @@ import { AiServiceModule } from './ai-service/ai-service.module';
       isGlobal: true,
     }),
     BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
+      redis: `.env.${process.env.REDIS_URL}`,
     }),
     UsersModule,
     VenueModule,
@@ -48,8 +46,6 @@ import { AiServiceModule } from './ai-service/ai-service.module';
     SectionModule,
     BookingModule,
     FirebaseModule,
-    SwapModule,
-    AiServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

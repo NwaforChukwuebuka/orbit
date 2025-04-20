@@ -4,10 +4,10 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
   Patch,
   Post,
+  Get,
   UseGuards,
 } from '@nestjs/common';
 import { BookingService } from './booking.service';
@@ -82,6 +82,16 @@ export class BookingController {
     return {
       message: 'Booking retrieved successfully',
       data: booking,
+      statusCode: 200,
+    };
+  }
+
+  @Get('')
+  async getAllBooking() {
+    const getAllBookings = await this.bookService.getAllBooking();
+    return {
+      message: 'Booking retrieved successfully',
+      data: getAllBookings,
       statusCode: 200,
     };
   }
