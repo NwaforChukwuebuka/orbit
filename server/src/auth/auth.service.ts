@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -92,97 +93,97 @@ export class AuthService {
 
   async requestPasswordReset(dto: RequestPasswordResetDTO): Promise<void> {
     const { email } = dto;
-    
+
     // Check if user exists
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
       throw new HttpException('User with this email does not exist', 404);
     }
-    
+
     // Generate OTP
     const otp = this.generateOTP();
-    
+
     // Store OTP in Redis with 15 minutes expiry
     const otpKey = `password_reset_otp_${email}`;
     await this.redisService.set(otpKey, otp, 15 * 60); // 15 minutes TTL
-    
+
     // Send OTP email
     const emailData = {
       to: email,
       subject: 'Password Reset OTP',
       text: `Your OTP for password reset is: ${otp}. This code will expire in 15 minutes.`,
     };
-    
+
     await this.taskService.sendMailTask(emailData);
   }
 
   async verifyOTP(dto: VerifyOtpDTO): Promise<{ resetToken: string }> {
     const { email, otp } = dto;
-    
+
     // Get OTP from Redis
     const otpKey = `password_reset_otp_${email}`;
     const storedOTP = await this.redisService.get(otpKey);
-    
+
     if (!storedOTP) {
       throw new HttpException('OTP expired or not found', 400);
     }
-    
+
     if (storedOTP !== otp) {
       throw new HttpException('Invalid OTP', 400);
     }
-    
+
     // OTP verified, generate reset token
     const resetToken = uuidv4();
     const resetTokenKey = `password_reset_token_${email}`;
-    
+
     // Store reset token in Redis with 15 minutes expiry
     await this.redisService.set(resetTokenKey, resetToken, 15 * 60);
-    
+
     // Delete the used OTP
     await this.redisService.del(otpKey);
-    
+
     return { resetToken };
   }
 
   async resetPassword(dto: ResetPasswordDTO): Promise<void> {
     const { email, resetToken, newPassword } = dto;
-    
+
     // Verify reset token
     const resetTokenKey = `password_reset_token_${email}`;
     const storedToken = await this.redisService.get(resetTokenKey);
-    
+
     if (!storedToken) {
       throw new HttpException('Reset token expired or not found', 400);
     }
-    
+
     if (storedToken !== resetToken) {
       throw new HttpException('Invalid reset token', 400);
     }
-    
+
     // Get user
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
       throw new HttpException('User not found', 404);
     }
-    
+
     // Hash new password
     const salt = await bc.genSalt();
     const hashedPassword = await bc.hash(newPassword, salt);
-    
+
     // Update user password
     user.password = hashedPassword;
     await this.userService.updateUser(user);
-    
+
     // Delete reset token
     await this.redisService.del(resetTokenKey);
-    
+
     // Send confirmation email
     const emailData = {
       to: email,
       subject: 'Password Reset Successful',
       text: 'Your password has been reset successfully.',
     };
-    
+
     await this.taskService.sendMailTask(emailData);
   }
 
