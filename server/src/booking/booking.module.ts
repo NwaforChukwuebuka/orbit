@@ -13,8 +13,8 @@ import { UserStreakModule } from 'src/user_streak/user_streak.module';
 @Module({
   imports: [
     UsersModule,
-    SpotModule,
     TaskModule,
+    SpotModule,
     FirebaseModule,
     UserStreakModule,
   ],

@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { CreateBookingDTO } from './dto/create-booking.dto';
@@ -43,7 +52,11 @@ export class BookingController {
     @Body() updateBookingDto: UpdateBookingDTO,
     @GetUser() user: any,
   ) {
-    const data = await this.bookService.updateBooking(id, updateBookingDto, user.userId);
+    const data = await this.bookService.updateBooking(
+      id,
+      updateBookingDto,
+      user.userId,
+    );
     return {
       message: 'Booking updated successfully',
       data,

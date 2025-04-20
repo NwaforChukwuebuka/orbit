@@ -83,7 +83,7 @@ export class SpotService {
                      THEN true 
                      ELSE false 
                    END`,
-              'isAvailable',
+              'availableForSwap',
             )
             .from('bookings', 'bookings')
             .where('bookings.spotId = spot.id'),
@@ -93,8 +93,14 @@ export class SpotService {
 
     return spots.map((spot) => ({
       ...spot,
-      isAvailableForSwap: spot['spot_isAvailable'] === 'true',
+      isAvailableForSwap: spot['spot_isAvailableForSwap'] === 'true',
     }));
+  }
+
+  async getAllAvailableSpots(): Promise<Spot[]> {
+    return await this.spotRepository.find({
+      where: { isAvailable: true },
+    });
   }
 
   async findOne(id: string): Promise<Spot> {

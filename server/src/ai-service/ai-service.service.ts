@@ -5,6 +5,10 @@ import { Injectable } from '@nestjs/common';
 import ModelClient, { ChatCompletionsOutput } from '@azure-rest/ai-inference';
 import { AzureKeyCredential } from '@azure/core-auth';
 import { ConfigService } from '@nestjs/config';
+import { AIAgentBookingRequest } from './types/types';
+import { SpotService } from 'src/spot/spot.service';
+import { CreateBookingDTO } from 'src/booking/dto/create-booking.dto';
+import { BookingService } from 'src/booking/booking.service';
 
 @Injectable()
 export class AiServiceService {
@@ -41,7 +45,11 @@ export class AiServiceService {
     },
   ];
   private userChatHistoryData = {};
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private spotService: SpotService,
+    private bookingService: BookingService,
+  ) {
     this.token = this.configService.get<string>('AZURE_OPENAI_API_KEY');
     this.client = this.getClient();
   }
@@ -78,8 +86,30 @@ export class AiServiceService {
       );
     }
     const result = (response.body as ChatCompletionsOutput).choices[0].message;
-    console.log('result', result);
     this.userChatHistoryData[userId].push(result);
     return result;
+  }
+
+  async aiAgentBookingCreation(payload: AIAgentBookingRequest) {
+    const { date, startTime, endTime, userId } = payload;
+    // get all available spots for the date
+    const availableSpots = await this.spotService.getAllAvailableSpots();
+    // pick a random spot
+    const randomIndex = Math.floor(Math.random() * availableSpots.length);
+    const randomSpot = availableSpots[randomIndex];
+    const parsedDate = new Date(date);
+    const parsedStartTime = new Date(startTime);
+    const parsedEndTime = new Date(endTime);
+    // create a booking object
+    const bookingPayload: CreateBookingDTO = {
+      date: parsedDate,
+      startTime: parsedStartTime,
+      endTime: parsedEndTime,
+      spot: randomSpot.id,
+      user: userId,
+      title: 'AI Booking',
+    };
+    // create booking
+    await this.bookingService.createBooking(bookingPayload);
   }
 }
