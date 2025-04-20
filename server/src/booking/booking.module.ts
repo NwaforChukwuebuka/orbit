@@ -5,15 +5,13 @@ import { UsersModule } from 'src/users/users.module';
 import { SpotModule } from 'src/spot/spot.module';
 import { BookingRepository } from './booking.repository';
 import { DataSource } from 'typeorm';
-
-import { TaskModule } from 'src/task/task.module';
+import { forwardRef } from '@nestjs/common';
 import { FirebaseModule } from 'src/firebase/firebase.module';
 import { UserStreakModule } from 'src/user_streak/user_streak.module';
 
 @Module({
   imports: [
-    UsersModule,
-    TaskModule,
+    forwardRef(() => UsersModule),
     SpotModule,
     FirebaseModule,
     UserStreakModule,

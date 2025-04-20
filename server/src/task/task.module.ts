@@ -9,7 +9,6 @@ import { UserStreakProcessor } from './processors/updateUserStreak.processor';
 import { UserStreakModule } from 'src/user_streak/user_streak.module';
 import { AiBookingProcessor } from './processors/ai-service.processor';
 import { AiServiceModule } from 'src/ai-service/ai-service.module';
-import { AiServiceService } from 'src/ai-service/ai-service.service';
 
 @Module({
   imports: [
@@ -31,14 +30,14 @@ import { AiServiceService } from 'src/ai-service/ai-service.service';
     EmailModule,
     FirebaseModule,
     UserStreakModule,
-    // AiServiceModule,
+    AiServiceModule,
   ],
   providers: [
     TaskService,
     EmailProcessor,
     FirebaseProcessor,
     UserStreakProcessor,
-    // AiBookingProcessor,
+    AiBookingProcessor,
   ],
   exports: [TaskService],
 })
