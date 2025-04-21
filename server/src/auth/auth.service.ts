@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
+
 import { HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -12,7 +10,7 @@ import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { LoginResponse } from './types/login-response';
 import { LoginUserDTO } from './dto/login-user.dto';
-import * as bc from 'bcrypt';
+import * as bc from 'bcryptjs';
 import { RedisService } from 'src/common/utils/redis.service';
 import { RequestPasswordResetDTO } from './dto/request-password-reset.dto';
 import { VerifyOtpDTO } from './dto/verify-otp.dto';
