@@ -16,7 +16,7 @@ export class UserRepository extends Repository<User> {
   async findByEmailWithRelations(email: string): Promise<User | null> {
     return this.findOne({
       where: { email },
-      relations: ['venue', 'tag', 'bookings'],
+      relations: ['venue', 'tag', 'streak'],
     });
   }
 
