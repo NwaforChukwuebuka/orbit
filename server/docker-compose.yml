@@ -10,6 +10,4 @@ services:
       - "4000:4000"
     env_file:
       - .env
-    volumes:
-      - .:/app
-    command: "node dist/main"
+    command: "node dist/main.js"
