@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/BookWorkspace.module.css";
+import styles from "../../../styles/BookWorkspace.module.css";
 import { FaChevronDown } from "react-icons/fa";
 
 function BookWorkspace() {

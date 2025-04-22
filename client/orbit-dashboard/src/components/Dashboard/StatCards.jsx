@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "../../styles/StatCards.module.css";
-import WorkspaceUsage from "./WorkspaceUsage";
-import UpcomingBooking from "./UpcomingBooking";
-import SeatSwapRequests from "./SeatSwapRequests";
+import WorkspaceUsage from "./Bookings/WorkspaceUsage";
+import UpcomingBooking from "./Bookings/UpcomingBooking";
+import SeatSwapRequests from "./Swaps/SeatSwapRequests";
 
 function StatCards() {
   return (

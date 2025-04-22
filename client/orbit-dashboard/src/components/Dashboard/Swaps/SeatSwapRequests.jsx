@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/SeatSwapRequests.module.css";
+import styles from "../../../styles/SeatSwapRequests.module.css";
 import { FaSync } from "react-icons/fa";
 
 function SeatSwapRequests() {

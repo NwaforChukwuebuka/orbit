@@ -1,6 +1,6 @@
 import React from "react";
 import { FaHistory, FaCheck, FaTimes } from "react-icons/fa";
-import styles from "../../styles/SwapHistory.module.css";
+import styles from "../../../styles/SwapHistory.module.css";
 
 const SwapHistory = () => {
   const history = [

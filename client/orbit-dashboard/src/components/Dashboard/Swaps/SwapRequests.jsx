@@ -1,6 +1,6 @@
 import React from "react";
 import { FaSync, FaCheck, FaTimes } from "react-icons/fa";
-import styles from "../../styles/SwapRequests.module.css";
+import styles from "../../../styles/SwapRequests.module.css";
 
 const SwapRequests = () => {
   // Sample swap requests data

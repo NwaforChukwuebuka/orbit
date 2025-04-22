@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/Topbar.module.css";
+import styles from "../../../styles/Topbar.module.css";
 import { FaSearch, FaBell, FaBars } from "react-icons/fa";
 
 function Topbar({ toggleSidebar }) {

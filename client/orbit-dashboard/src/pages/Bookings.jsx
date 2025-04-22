@@ -1,8 +1,7 @@
-// pages/bookings.js
 import React from "react";
-import BookingCalendar from "../components/Dashboard/BookingsCalendar";
-import CurrentBookings from "../components/Dashboard/CurrentBookings";
-import BookWorkspace from "../components/Dashboard/BookWorkspace";
+import BookingCalendar from "../components/Dashboard/Bookings/BookingsCalendar";
+import CurrentBookings from "../components/Dashboard/Bookings/CurrentBookings";
+import BookWorkspace from "../components/Dashboard/Bookings/BookWorkspace";
 import styles from "../styles/Bookings.module.css";
 
 const Bookings = () => {

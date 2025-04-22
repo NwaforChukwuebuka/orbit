@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/BookingsCalendar.module.css";
+import styles from "../../../styles/BookingsCalendar.module.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 function BookingsCalendar() {

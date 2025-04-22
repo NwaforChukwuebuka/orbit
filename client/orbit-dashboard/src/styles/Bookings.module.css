@@ -1,3 +1,14 @@
+.pageHeader {
+  margin-bottom: 30px;
+}
+
+.pageHeader h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
 .bookingsPage {
   padding: 24px;
   background-color: #f4f9fd;

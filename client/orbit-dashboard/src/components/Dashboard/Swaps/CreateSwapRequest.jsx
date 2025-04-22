@@ -1,7 +1,7 @@
 // components/CreateSwapRequest/CreateSwapRequest.js
 import React, { useState } from "react";
 import { FaExchangeAlt, FaChevronDown, FaCalendarAlt } from "react-icons/fa";
-import styles from "../../styles/CreateSwapRequest.module.css";
+import styles from "../../../styles/CreateSwapRequest.module.css";
 
 const CreateSwapRequest = () => {
   const [currentDesk, setCurrentDesk] = useState("Desk #23");

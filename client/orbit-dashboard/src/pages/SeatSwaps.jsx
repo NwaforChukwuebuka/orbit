@@ -1,7 +1,7 @@
 import React from "react";
-import SwapRequests from "../components/Dashboard/SwapRequests";
-import CreateSwapRequest from "../components/Dashboard/CreateSwapRequest";
-import SwapHistory from "../components/Dashboard/SwapHistory";
+import SwapRequests from "../components/Dashboard/Swaps/SwapRequests";
+import CreateSwapRequest from "../components/Dashboard/Swaps/CreateSwapRequest";
+import SwapHistory from "../components/Dashboard/Swaps/SwapHistory";
 import styles from "../styles/SeatSwaps.module.css";
 
 const SeatSwaps = () => {

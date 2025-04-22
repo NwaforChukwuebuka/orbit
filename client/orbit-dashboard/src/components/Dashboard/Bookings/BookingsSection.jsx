@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/BookingsSection.module.css";
+import styles from "../../../styles/BookingsSection.module.css";
 import BookingsCalendar from "./BookingsCalendar";
 import CurrentBookings from "./CurrentBookings";
 import BookingStreak from "./BookingStreak";

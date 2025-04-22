@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/WorkspaceUsage.module.css";
+import styles from "../../../styles/WorkspaceUsage.module.css";
 import { FaBed } from "react-icons/fa";
 
 function WorkspaceUsage() {

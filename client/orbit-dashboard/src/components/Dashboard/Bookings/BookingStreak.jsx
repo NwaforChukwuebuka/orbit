@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/BookingStreak.module.css";
+import styles from "../../../styles/BookingStreak.module.css";
 import { FaTrophy } from "react-icons/fa";
 
 function BookingStreak() {

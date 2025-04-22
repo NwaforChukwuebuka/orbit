@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styles from "./styles/App.module.css";
-import Sidebar from "./layout/Sidebar";
-import Topbar from "./layout/Topbar";
+import Sidebar from "./components/Dashboard/layout/Sidebar";
+import Topbar from "./components/Dashboard/layout/Topbar";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
 import SeatSwaps from "./pages/SeatSwaps";

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/CurrentBookings.module.css";
+import styles from "../../../styles/CurrentBookings.module.css";
 
 function CurrentBookings() {
   return (

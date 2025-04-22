@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/UpcomingBooking.module.css";
+import styles from "../../../styles/UpcomingBooking.module.css";
 import { FaCalendarAlt } from "react-icons/fa";
 
 function UpcomingBooking() {
