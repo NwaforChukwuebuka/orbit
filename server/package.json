@@ -31,7 +31,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.1.2",
     "@nestjs/typeorm": "^11.0.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "bull": "^4.16.5",
     "class-transformer": "^0.5.1",
