@@ -1,37 +1,93 @@
-.topbar {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 24px;
-  border-radius: 0 0 12px 12px;
+  padding: 20px 0;
+  margin-bottom: 20px;
 }
 
-.searchInput {
-  flex: 1;
-  padding: 10px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-right: 16px;
-  max-width: 320px;
-}
-
-.actions {
+.headerLeft {
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
-.icon {
+.menuToggle {
+  display: none;
+  background: none;
+  border: none;
   font-size: 20px;
-  color: #6b7280;
+  margin-right: 15px;
   cursor: pointer;
-  transition: color 0.2s;
+  color: #333;
 }
 
-.icon:hover {
-  color: #1d4ed8;
+.search {
+  position: relative;
+  width: 400px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 14px;
+}
+
+.search input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 50px;
+  font-size: 14px;
+  outline: none;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.notificationBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 20px;
+  font-size: 18px;
+  color: #666;
+}
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .menuToggle {
+    display: block;
+  }
+
+  .search {
+    width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    padding: 15px 0;
+  }
+
+  .search {
+    width: 150px;
+  }
+
+  .notificationBtn {
+    margin-right: 10px;
+  }
 }

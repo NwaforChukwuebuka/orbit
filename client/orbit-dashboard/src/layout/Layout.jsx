@@ -1,21 +1,15 @@
 import React from "react";
-import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import Footer from "./Footer";
-import { Outlet } from "react-router-dom";
-import styles from "../styles/Layout.module.css";
+import Sidebar from "./Sidebar";
 
-export default function Layout() {
+function Layout() {
   return (
-    <div className={styles.layout}>
+    <div className="layout">
+      <Topbar />
       <Sidebar />
-      <main className={styles.main}>
-        <Topbar />
-        <div className={styles.content}>
-          <Outlet />
-        </div>
-        <Footer />
-      </main>
+      <Outlet />
     </div>
   );
 }
+
+export default Layout;

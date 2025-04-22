@@ -1,13 +1,20 @@
-// src/components/Dashboard/BookingStreak.jsx
 import React from "react";
 import styles from "../../styles/BookingStreak.module.css";
+import { FaTrophy } from "react-icons/fa";
 
-export default function BookingStreak() {
+function BookingStreak() {
   return (
-    <div className={styles.streakBox}>
-      <h4 className={styles.boxTitle}>Booking Streak</h4>
-      <div className={styles.streakBadge}>🔥 3-Day Streak</div>
-      <p className={styles.subText}>Keep booking to earn rewards!</p>
+    <div className={styles.streakCard}>
+      <h3>Booking Streak</h3>
+      <div className={styles.streakContent}>
+        <div className={styles.trophy}>
+          <FaTrophy />
+        </div>
+        <h4>3-Day Streak</h4>
+        <p>Keep booking works-pace to continue your streak!</p>
+      </div>
     </div>
   );
 }
+
+export default BookingStreak;

@@ -1,0 +1,45 @@
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+}
+
+.iconBox {
+  width: 50px;
+  height: 50px;
+  background-color: #0052cc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.content h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.rate {
+  display: flex;
+  align-items: baseline;
+}
+
+.percentage {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-right: 8px;
+}
+
+.label {
+  color: #666;
+  font-size: 14px;
+}

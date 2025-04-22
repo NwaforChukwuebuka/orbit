@@ -1,0 +1,24 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 20px;
+  padding-top: 0;
+  width: 100%;
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .mainContent {
+    padding: 15px;
+  }
+}

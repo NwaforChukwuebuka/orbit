@@ -1,17 +1,24 @@
-// src/App.jsx
-import { Routes, Route } from "react-router-dom";
-import Layout from "./layout/Layout";
-import Dashboard from "./pages/Dashboard"; // or adjust path based on your structure
+import React, { useState } from "react";
+import styles from "./styles/App.module.css";
+import Sidebar from "./layout/Sidebar";
+import Topbar from "./layout/Topbar";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        {/* Future routes */}
-        {/* <Route path="/bookings" element={<Bookings />} /> */}
-      </Route>
-    </Routes>
+    <div className={styles.app}>
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <div className={styles.mainContent}>
+        <Topbar toggleSidebar={toggleSidebar} />
+        <Dashboard />
+      </div>
+    </div>
   );
 }
 
