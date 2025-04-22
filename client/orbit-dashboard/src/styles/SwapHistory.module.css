@@ -1,0 +1,172 @@
+.historyContainer {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.headerIcon {
+  color: #0066cc;
+  font-size: 20px;
+  margin-right: 12px;
+}
+
+.header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.historyTable {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #f0f4f8;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  background-color: #f5f8fb;
+  padding: 12px 15px;
+  font-weight: 500;
+  color: #666;
+  font-size: 14px;
+}
+
+.tableBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+  padding: 15px;
+  border-top: 1px solid #f0f4f8;
+  font-size: 14px;
+  color: #333;
+}
+
+.tableRow:hover {
+  background-color: #f9fbfd;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+}
+
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #0066cc;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.userName {
+  font-weight: 500;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.approved {
+  background-color: #e6f7f0;
+  color: #00cc99;
+}
+
+.declined {
+  background-color: #fef1f1;
+  color: #ff6666;
+}
+
+.statusIcon {
+  margin-right: 5px;
+  font-size: 10px;
+}
+
+@media (max-width: 992px) {
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  }
+
+  .tableHeader div:nth-child(2),
+  .tableRow div:nth-child(2) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 2fr 1fr 1.5fr;
+  }
+
+  .tableHeader div:nth-child(3),
+  .tableRow div:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .historyContainer {
+    padding: 15px;
+  }
+
+  .tableHeader {
+    display: none;
+  }
+
+  .tableRow {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .cell {
+    position: relative;
+    padding-left: 100px;
+    min-height: 30px;
+  }
+
+  .cell::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 90px;
+    font-weight: 500;
+    color: #666;
+  }
+
+  .userInfo {
+    padding-left: 0;
+  }
+}

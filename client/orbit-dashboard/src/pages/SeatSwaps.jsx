@@ -1,14 +1,12 @@
-// pages/seat-swaps.js
 import React from "react";
-import Layout from "../components/Layout/Layout";
-import SwapRequests from "../components/SwapRequests/SwapRequests";
-import CreateSwapRequest from "../components/CreateSwapRequest/CreateSwapRequest";
-import SwapHistory from "../components/SwapHistory/SwapHistory";
-import styles from "../styles/pages/SeatSwaps.module.css";
+import SwapRequests from "../components/Dashboard/SwapRequests";
+import CreateSwapRequest from "../components/Dashboard/CreateSwapRequest";
+import SwapHistory from "../components/Dashboard/SwapHistory";
+import styles from "../styles/SeatSwaps.module.css";
 
 const SeatSwaps = () => {
   return (
-    <Layout>
+    <>
       <div className={styles.pageHeader}>
         <h1>Seat Swaps</h1>
       </div>
@@ -26,7 +24,7 @@ const SeatSwaps = () => {
       <div className={styles.historySection}>
         <SwapHistory />
       </div>
-    </Layout>
+    </>
   );
 };
 

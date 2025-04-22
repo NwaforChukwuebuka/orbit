@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../styles/Sidebar.module.css";
+import { Link } from "react-router-dom";
 import {
   FaThLarge,
   FaCalendarAlt,
@@ -46,15 +47,21 @@ function Sidebar({ isOpen, toggleSidebar }) {
         <ul>
           <li>
             <FaThLarge />
-            <span>Dashboard</span>
+            <Link to="/dashboard">
+              <span>Dashboard</span>
+            </Link>
           </li>
           <li>
             <FaCalendarAlt />
-            <span>Bookings</span>
+            <Link to="/bookings">
+              <span>Bookings</span>
+            </Link>
           </li>
           <li>
             <FaExchangeAlt />
-            <span>Seat Swaps</span>
+            <Link to="/seat-swaps">
+              <span>Seat Swaps</span>
+            </Link>
           </li>
           <li>
             <FaChartBar />
