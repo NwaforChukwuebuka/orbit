@@ -69,12 +69,12 @@ function Sidebar({ isOpen, toggleSidebar }) {
           </li>
         </ul>
       </nav>
-      {/* <div className={styles.userProfile}>
+      <div className={styles.userProfile}>
         <div className={styles.avatar}>
           <FaUser />
         </div>
         <span>Administrator</span>
-      </div> */}
+      </div>
     </div>
   );
 }
