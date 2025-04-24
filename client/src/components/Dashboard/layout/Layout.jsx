@@ -1,16 +1,18 @@
 import React from "react";
-import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
-import { Outlet } from "react-router-dom";
+import Topbar from "./Topbar";
+import styles from "../../../styles/App.module.css";
 
-function Layout() {
+const Layout = ({ children, sidebarOpen, toggleSidebar }) => {
   return (
-    <div className="layout">
-      <Topbar />
-      <Sidebar />
-      <Outlet />
+    <div className={styles.app}>
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <div className={styles.mainContent}>
+        <Topbar toggleSidebar={toggleSidebar} />
+        {children}
+      </div>
     </div>
   );
-}
+};
 
 export default Layout;

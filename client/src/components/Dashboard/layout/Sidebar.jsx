@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../../../styles/Sidebar.module.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FaThLarge,
   FaCalendarAlt,
@@ -11,10 +11,22 @@ import {
 } from "react-icons/fa";
 
 function Sidebar({ isOpen, toggleSidebar }) {
+  const location = useLocation();
+  const [activePath, setActivePath] = useState("");
+
+  useEffect(() => {
+    // Update active path when location changes
+    setActivePath(location.pathname);
+  }, [location]);
+
+  const isActive = (path) => {
+    return activePath === path;
+  };
+
   return (
     <div className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
       <div className={styles.sidebarHeader}>
-        <div className={styles.logo}>
+        <Link to="/" className={styles.logo}>
           <div className={styles.logoIcon}>
             <svg
               viewBox="0 0 36 36"
@@ -37,35 +49,45 @@ function Sidebar({ isOpen, toggleSidebar }) {
             </svg>
           </div>
           <h1>Orbit</h1>
-        </div>
+        </Link>
+
         <button className={styles.closeButton} onClick={toggleSidebar}>
           <FaTimes />
         </button>
-        <hr />
       </div>
       <nav className={styles.navigation}>
         <ul>
-          <li>
-            <FaThLarge />
-            <Link to="/dashboard">
-              <span>Dashboard</span>
+          <li className={isActive("/dashboard") ? styles.active : ""}>
+            <Link to="/dashboard" className={styles.navLink}>
+              <span className={styles.icon}>
+                <FaThLarge />
+              </span>
+              <span className={styles.navigationText}>Dashboard</span>
             </Link>
           </li>
-          <li>
-            <FaCalendarAlt />
-            <Link to="/bookings">
-              <span>Bookings</span>
+          <li className={isActive("/bookings") ? styles.active : ""}>
+            <Link to="/bookings" className={styles.navLink}>
+              <span className={styles.icon}>
+                <FaCalendarAlt />
+              </span>
+              <span className={styles.navigationText}>Bookings</span>
             </Link>
           </li>
-          <li>
-            <FaExchangeAlt />
-            <Link to="/seat-swaps">
-              <span>Seat Swaps</span>
+          <li className={isActive("/seat-swaps") ? styles.active : ""}>
+            <Link to="/seat-swaps" className={styles.navLink}>
+              <span className={styles.icon}>
+                <FaExchangeAlt />
+              </span>
+              <span className={styles.navigationText}>Seat Swaps</span>
             </Link>
           </li>
-          <li>
-            <FaChartBar />
-            <span>Analytics</span>
+          <li className={isActive("/analytics") ? styles.active : ""}>
+            <Link to="/analytics" className={styles.navLink}>
+              <span className={styles.icon}>
+                <FaChartBar />
+              </span>
+              <span className={styles.navigationText}>Analytics</span>
+            </Link>
           </li>
         </ul>
       </nav>
@@ -73,7 +95,10 @@ function Sidebar({ isOpen, toggleSidebar }) {
         <div className={styles.avatar}>
           <FaUser />
         </div>
-        <span>Administrator</span>
+        <div className={styles.userInfo}>
+          <div className={styles.userName}>John Doe</div>
+          <div className={styles.userRole}>Administrator</div>
+        </div>
       </div>
     </div>
   );
