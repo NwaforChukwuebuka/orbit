@@ -38,7 +38,7 @@ import { ActivityModule } from './activity/activity.module';
     SpotModule,
     WorkStationModule,
     VenueRulesModule,
-    UserStreakModule,
+    UserStreakModule,k
     AuthModule,
     TagModule,
     EmailModule,
@@ -46,6 +46,7 @@ import { ActivityModule } from './activity/activity.module';
     SectionModule,
     BookingModule,
     FirebaseModule,
+    ActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],
