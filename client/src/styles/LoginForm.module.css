@@ -1,0 +1,160 @@
+.loginContainer {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f8f9fa;
+}
+
+.formWrapper {
+  flex: 1;
+  max-width: 500px;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.logoContainer {
+  margin-bottom: 2rem;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.logo span {
+  color: #4685ff;
+}
+
+.title {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.forgotPassword {
+  text-align: right;
+  margin-top: -0.5rem;
+}
+
+.forgotPassword a {
+  color: #4685ff;
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.forgotPassword a:hover {
+  color: #2c5cc5;
+  text-decoration: underline;
+}
+
+.signupPrompt {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.signupPrompt a {
+  color: #4685ff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.signupPrompt a:hover {
+  color: #2c5cc5;
+  text-decoration: underline;
+}
+
+.loginError {
+  background-color: rgba(248, 215, 218, 0.8);
+  color: #721c24;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+.imageContainer {
+  flex: 1.5;
+  background-image: url("https://i.postimg.cc/Y2Q6XSCg/istockphoto-1317893331-612x612.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: none;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  color: white;
+}
+
+.overlay h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.overlay p {
+  font-size: 1rem;
+  max-width: 80%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Media query for larger screens */
+@media (min-width: 768px) {
+  .imageContainer {
+    display: block;
+  }
+}

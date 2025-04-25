@@ -1,0 +1,159 @@
+.sidebar {
+  width: 250px;
+  background-color: white;
+  border-right: 1px solid #e0e0e0;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.closeButton {
+  display: none;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  overflow: hidden;
+}
+
+.logo h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.navigation {
+  margin-top: 10px;
+  padding: 0 8px;
+}
+
+.navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navigation li {
+  margin: 4px 0;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  color: #555;
+  text-decoration: none;
+  font-weight: 500;
+  width: 100%;
+  border-radius: 6px;
+}
+
+.navigation li:hover .navLink {
+  background-color: #f5f7fa;
+  color: #1a73e8;
+}
+
+.navigation li.active .navLink {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+}
+
+.navigationText {
+  font-size: 14px;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: auto;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background-color: #f0f2f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  color: #666;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.userRole {
+  font-size: 12px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100%;
+    box-shadow: none;
+  }
+
+  .sidebar.open {
+    left: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .closeButton {
+    display: block;
+  }
+}

@@ -1,0 +1,41 @@
+.card {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  align-items: flex-start;
+}
+
+.icon {
+  font-size: 24px;
+  background-color: #e0f2fe;
+  color: #0ea5e9;
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #111827;
+}
+
+.sub {
+  font-size: 13px;
+  color: #6b7280;
+}

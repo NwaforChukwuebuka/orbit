@@ -1,0 +1,202 @@
+/* Spaces.module.css */
+.spacesSection {
+  padding: 100px 0;
+  background-color: #f9f9f9;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.highlight {
+  color: #3a86ff;
+}
+
+.sectionSubtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 60px;
+  color: #6b7280;
+}
+
+.spacesDisplay {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.spacesNav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.navButton {
+  padding: 12px 24px;
+  border: none;
+  background: transparent;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e5e7eb;
+  color: #4b5563;
+}
+
+.navButton.active {
+  background-color: #4a6cf7;
+  color: white;
+  border-color: #4a6cf7;
+  box-shadow: 0 10px 20px rgba(74, 108, 247, 0.2);
+}
+
+.navButton:hover:not(.active) {
+  background-color: #e5e7eb;
+}
+
+.spacesContent {
+  position: relative;
+  min-height: 500px;
+}
+
+.spaceCard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  .spaceCard {
+    flex-direction: column-reverse;
+  }
+}
+
+.spaceCard.active {
+  opacity: 1;
+  transform: translateX(0);
+  z-index: 2;
+}
+
+.spaceCard.inactive {
+  opacity: 0;
+  transform: translateX(50px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spaceInfo {
+  padding: 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.spaceImageContainer {
+  flex: 1;
+  overflow: hidden;
+}
+
+.spaceImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.spaceCard:hover .spaceImage {
+  transform: scale(1.05);
+}
+
+.spaceTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #111827;
+}
+
+.spaceDescription {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.spaceDetails {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.spaceCapacity h4,
+.spaceAmenities h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.spaceCapacity p {
+  color: #6b7280;
+}
+
+.spaceAmenities ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.spaceAmenities li {
+  color: #6b7280;
+  margin-bottom: 5px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.spaceAmenities li:before {
+  content: "✓";
+  color: #4a6cf7;
+  position: absolute;
+  left: 0;
+}
+
+.bookButton {
+  align-self: flex-start;
+  padding: 12px 30px;
+  background-color: #4a6cf7;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: auto;
+  box-shadow: 0 10px 20px rgba(74, 108, 247, 0.2);
+}
+
+.bookButton:hover {
+  background-color: #3b5bd9;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(74, 108, 247, 0.3);
+}

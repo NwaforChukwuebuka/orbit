@@ -1,0 +1,50 @@
+.pageHeader {
+  margin-bottom: 30px;
+}
+
+.pageHeader h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.swapsLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.requestsSection,
+.createSection {
+  width: 100%;
+  height: 100%;
+}
+
+.historySection {
+  width: 100%;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .swapsLayout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .pageHeader {
+    margin-bottom: 20px;
+  }
+
+  .pageHeader h1 {
+    font-size: 20px;
+  }
+
+  .swapsLayout {
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+}
