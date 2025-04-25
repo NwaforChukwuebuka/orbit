@@ -5,6 +5,9 @@ import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
 import SeatSwaps from "./pages/SeatSwaps";
 import Homepage from "./pages/Homepage";
+import AdminRegistration from "./components/Auth/AdminRegistration";
+import LoginForm from "./components/Auth/LoginForm";
+import { PasswordResetRequest } from "./components/Auth/PasswordReset";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,6 +44,9 @@ function App() {
             </Layout>
           }
         />
+        <Route path="/register" element={<AdminRegistration />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/forgot-password" element={<PasswordResetRequest />} />
       </Routes>
     </BrowserRouter>
   );

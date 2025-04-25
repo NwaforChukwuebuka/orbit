@@ -1,0 +1,149 @@
+.registrationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  padding: 20px;
+}
+
+.formCard {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  position: relative;
+}
+
+.formCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, #4776e6 0%, #8e54e9 100%);
+}
+
+.logoContainer {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.logo span {
+  color: #4776e6;
+}
+
+.tagline {
+  color: #7f8c8d;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nameFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.errorAlert {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-left: 4px solid #e74c3c;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.submitButton {
+  margin-top: 10px;
+  background: linear-gradient(90deg, #4776e6 0%, #8e54e9 100%);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(71, 118, 230, 0.1);
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(71, 118, 230, 0.2);
+}
+
+.submitButton:disabled {
+  background: #b3b3b3;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.formFooter {
+  margin-top: 30px;
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.loginLink {
+  color: #4776e6;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.loginLink:hover {
+  color: #8e54e9;
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .formCard {
+    padding: 30px 20px;
+  }
+
+  .nameFields {
+    grid-template-columns: 1fr;
+  }
+}

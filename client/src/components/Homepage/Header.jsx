@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/Header.module.css";
+import { Link } from "react-router-dom";
+import Logo from "../Logo/Logo";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -21,9 +23,7 @@ const Header = () => {
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.container}>
-        <a href="/" className={styles.logo}>
-          <span className={styles.logoText}>Orbit</span>
-        </a>
+        <Logo />
 
         <nav className={styles.nav}>
           <ul className={styles.navList}>
@@ -43,8 +43,12 @@ const Header = () => {
         </nav>
 
         <div className={styles.buttons}>
-          <button className={styles.login}>Log In</button>
-          <button className={styles.signup}>Sign Up</button>
+          <Link to="/login" className={styles.login}>
+            Log In
+          </Link>
+          <Link to="/register" className={styles.signup}>
+            Sign Up
+          </Link>
         </div>
       </div>
     </header>
